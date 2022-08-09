@@ -2,10 +2,11 @@ package goweb
 
 import (
 	"goweb/framework"
+	"goweb/framework/middleware"
 )
 
 func RegRouter(core *framework.Core) {
-	core.Get("/user/login", func(c *framework.Context) error {
+	core.Get("/user/login", middleware.Test1(), func(c *framework.Context) error {
 		c.Json(200, "login success")
 		return nil
 	})
@@ -18,7 +19,7 @@ func RegRouter(core *framework.Core) {
 		c.Json(200, "put :id")
 		return nil
 	})
-	sub.Get("/:id", func(c *framework.Context) error {
+	sub.Get("/:id", middleware.Test2(), func(c *framework.Context) error {
 		c.Json(200, "get :id")
 		return nil
 	})

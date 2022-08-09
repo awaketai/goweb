@@ -18,10 +18,10 @@ type Trie struct {
 }
 
 type node struct {
-	isLast  bool              // 代表这个节点是否可以成为最终的路由规则，该节点是否能成为一个独立的uri，是否自身就是一个终极节点
-	segment string            // uri中的字符串，代表这个节点表示的路由中某个段的字符串
-	handler ControllerHandler // 这个节点中包含的控制器，用于最终加载调用
-	childs  []*node           // 子节点
+	isLast   bool                // 代表这个节点是否可以成为最终的路由规则，该节点是否能成为一个独立的uri，是否自身就是一个终极节点
+	segment  string              // uri中的字符串，代表这个节点表示的路由中某个段的字符串
+	handlers []ControllerHandler // 这个节点中包含的控制器，用于最终加载调用
+	childs   []*node             // 子节点
 }
 
 // 是否通用开头，即以:开头
@@ -31,7 +31,8 @@ func isWildSegment(segment string) bool {
 
 func newNode() *node {
 	return &node{
-		childs: make([]*node, 0),
+		childs:   make([]*node, 0),
+		handlers: make([]ControllerHandler, 0),
 	}
 }
 
@@ -110,7 +111,7 @@ func (n *node) matchNode(uri string) *node {
 	return nil
 }
 
-func (tree *Trie) AddRouter(uri string, handler ControllerHandler) error {
+func (tree *Trie) AddRouter(uri string, handlers []ControllerHandler) error {
 	n := tree.root
 	if n.matchNode(uri) != nil {
 		return fmt.Errorf("route exists:" + uri)
@@ -141,7 +142,7 @@ func (tree *Trie) AddRouter(uri string, handler ControllerHandler) error {
 			cnode.segment = segment
 			if isLast {
 				cnode.isLast = true
-				cnode.handler = handler
+				cnode.handlers = handlers
 			}
 			n.childs = append(n.childs, cnode)
 			objNode = cnode
@@ -153,11 +154,11 @@ func (tree *Trie) AddRouter(uri string, handler ControllerHandler) error {
 	return nil
 }
 
-func (tree *Trie) FindHandler(uri string) ControllerHandler {
+func (tree *Trie) FindHandler(uri string) []ControllerHandler {
 	matchNode := tree.root.matchNode(uri)
 	if matchNode == nil {
 		return nil
 	}
 
-	return matchNode.handler
+	return matchNode.handlers
 }
