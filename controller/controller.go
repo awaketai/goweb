@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"goweb/framework"
+	"net/http"
 	"time"
 )
 
@@ -21,7 +22,7 @@ func FooControllerHandler(ctx *framework.Context) error {
 		}()
 		// do sth
 		time.Sleep(10 * time.Second)
-		ctx.Json(200, "ok")
+		ctx.SetStatus(http.StatusOK).Json("ok")
 		finish <- struct{}{}
 	}()
 
@@ -29,17 +30,19 @@ func FooControllerHandler(ctx *framework.Context) error {
 	case p := <-panicCh:
 		ctx.WriterMux().Lock()
 		defer ctx.WriterMux().Unlock()
-		ctx.Json(500, p)
+		ctx.SetStatus(http.StatusInternalServerError).Json(p)
+
 	case <-finish:
 		fmt.Println("finish")
 	case <-durationCtx.Done():
 		ctx.WriterMux().Lock()
 		defer ctx.WriterMux().Unlock()
-		ctx.Json(500, "time out")
+		ctx.SetStatus(http.StatusInternalServerError).Json("time out")
 		ctx.SetHasTimeout()
 	}
 
-	return ctx.Json(200, map[string]any{
+	ctx.SetStatus(http.StatusOK).Json(map[string]any{
 		"code": 0,
 	})
+	return nil
 }

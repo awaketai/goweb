@@ -22,6 +22,7 @@ type node struct {
 	segment  string              // uri中的字符串，代表这个节点表示的路由中某个段的字符串
 	handlers []ControllerHandler // 这个节点中包含的控制器，用于最终加载调用
 	childs   []*node             // 子节点
+	parent   *node               // 父节点
 }
 
 // 是否通用开头，即以:开头
@@ -144,6 +145,8 @@ func (tree *Trie) AddRouter(uri string, handlers []ControllerHandler) error {
 				cnode.isLast = true
 				cnode.handlers = handlers
 			}
+			// 父节点，组成双向链表
+			cnode.parent = n
 			n.childs = append(n.childs, cnode)
 			objNode = cnode
 		}
@@ -152,6 +155,23 @@ func (tree *Trie) AddRouter(uri string, handlers []ControllerHandler) error {
 	}
 
 	return nil
+}
+
+func (n *node) parseParamsFromEndNode(uri string) map[string]string {
+	ret := make(map[string]string)
+	segments := strings.Split(uri, "/")
+	cnt := len(segments)
+	cur := n
+	for i := cnt - 1; i >= 0; i-- {
+		if cur.segment == "" {
+			break
+		}
+		if isWildSegment(cur.segment) {
+			ret[cur.segment[1:]] = segments[i]
+		}
+		cur = cur.parent
+	}
+	return ret
 }
 
 func (tree *Trie) FindHandler(uri string) []ControllerHandler {
