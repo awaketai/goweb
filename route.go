@@ -4,6 +4,7 @@ import (
 	"goweb/framework"
 	"goweb/framework/middleware"
 	"net/http"
+	"time"
 )
 
 func RegRouter(core *framework.Core) {
@@ -11,6 +12,13 @@ func RegRouter(core *framework.Core) {
 		c.SetStatus(http.StatusOK).Json("login success")
 		return nil
 	})
+	core.Get("/shutdown", func(c *framework.Context) error {
+		foo, _ := c.QueryString("foo", "def")
+		time.Sleep(10 * time.Second)
+		c.SetOkStatus().Json("ok,UserloginController:" + foo)
+		return nil
+	})
+
 	sub := core.Group("/subject")
 	sub.Delete("/:id", func(c *framework.Context) error {
 		c.SetStatus(http.StatusOK).Json("delete")
