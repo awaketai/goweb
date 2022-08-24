@@ -1,40 +1,45 @@
 package goweb
 
 import (
-	"goweb/framework"
-	"goweb/framework/middleware"
 	"net/http"
 	"time"
+
+	"github.com/awaketai/goweb/framework/gin"
+	"github.com/awaketai/goweb/framework/middleware"
 )
 
-func RegRouter(core *framework.Core) {
-	core.Get("/user/login", middleware.Test1(), func(c *framework.Context) error {
-		c.SetStatus(http.StatusOK).Json("login success")
-		return nil
+func RegRouter(core *gin.Engine) {
+	core.GET("/user/login", middleware.Test1(), func(c *gin.Context) {
+		c.ISetStatus(http.StatusOK).IJson("login success")
 	})
-	core.Get("/shutdown", func(c *framework.Context) error {
-		foo, _ := c.QueryString("foo", "def")
+	core.GET("/shutdown", func(c *gin.Context) {
+		foo, _ := c.DefaultQueryString("foo", "def")
 		time.Sleep(10 * time.Second)
-		c.SetOkStatus().Json("ok,UserloginController:" + foo)
-		return nil
+		c.ISetOkStatus().IJson("ok,UserloginController:" + foo)
 	})
 
 	sub := core.Group("/subject")
-	sub.Delete("/:id", func(c *framework.Context) error {
-		c.SetStatus(http.StatusOK).Json("delete")
-		return nil
+	sub.DELETE("/:id", func(c *gin.Context) {
+		id, ret := c.Params.Get("id")
+		if ret {
+			c.ISetStatus(http.StatusOK).IJson("delete-" + id)
+		} else {
+			c.ISetStatus(http.StatusOK).IJson("delete-" + id)
+		}
 	})
-	sub.Put("/:id", func(c *framework.Context) error {
-		c.SetStatus(http.StatusOK).Json("put :id")
-		return nil
+	sub.PUT("/:id", func(c *gin.Context) {
+		c.ISetStatus(http.StatusOK).IJson("put :id")
 	})
-	sub.Get("/:id", middleware.Test2(), func(c *framework.Context) error {
-		c.SetStatus(http.StatusOK).Json("get :id")
-		return nil
+	sub.GET("/:id", middleware.Test2(), func(c *gin.Context) {
+		id, ret := c.Params.Get("id")
+		if ret {
+			c.ISetStatus(http.StatusOK).IJson("get :id" + id)
+		} else {
+			c.ISetStatus(http.StatusOK).IJson("get-" + id)
+		}
 	})
-	sub.Get("/list/all", func(c *framework.Context) error {
-		c.SetStatus(http.StatusOK).Json("get list all")
-		return nil
+	sub.GET("/list/all", func(c *gin.Context) {
+		c.ISetStatus(http.StatusOK).IJson("get list all")
 	})
 
 }

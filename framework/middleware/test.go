@@ -2,23 +2,24 @@ package middleware
 
 import (
 	"fmt"
-	"goweb/framework"
+
+	"github.com/awaketai/goweb/framework/gin"
 )
 
-func Test1() framework.ControllerHandler {
-	return func(c *framework.Context) error {
+func Test1() gin.HandlerFunc {
+
+	return func(c *gin.Context) {
 		fmt.Println("middleware pre test1")
 		c.Next()
 		fmt.Println("middleware post test1")
-		return nil
+		return
 	}
 }
 
-func Test2() framework.ControllerHandler {
-	return func(c *framework.Context) error {
+func Test2() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		fmt.Println("middleware pre test2")
 		c.Next()
 		fmt.Println("middleware post test2")
-		return nil
 	}
 }

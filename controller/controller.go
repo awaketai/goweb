@@ -3,13 +3,14 @@ package controller
 import (
 	"context"
 	"fmt"
-	"goweb/framework"
 	"net/http"
 	"time"
+
+	"github.com/awaketai/goweb/framework/gin"
 )
 
-func FooControllerHandler(ctx *framework.Context) error {
-	durationCtx, cancel := context.WithTimeout(ctx.BaseContext(), time.Duration(1*time.Second))
+func FooControllerHandler(ctx *gin.Context) error {
+	durationCtx, cancel := context.WithTimeout(context.Background(), time.Duration(1*time.Second))
 	defer cancel()
 	finish := make(chan struct{}, 1)
 	panicCh := make(chan any, 1)
@@ -22,26 +23,21 @@ func FooControllerHandler(ctx *framework.Context) error {
 		}()
 		// do sth
 		time.Sleep(10 * time.Second)
-		ctx.SetStatus(http.StatusOK).Json("ok")
+		ctx.ISetStatus(http.StatusOK).IJson("ok")
 		finish <- struct{}{}
 	}()
 
 	select {
 	case p := <-panicCh:
-		ctx.WriterMux().Lock()
-		defer ctx.WriterMux().Unlock()
-		ctx.SetStatus(http.StatusInternalServerError).Json(p)
+		ctx.ISetStatus(http.StatusInternalServerError).IJson(p)
 
 	case <-finish:
 		fmt.Println("finish")
 	case <-durationCtx.Done():
-		ctx.WriterMux().Lock()
-		defer ctx.WriterMux().Unlock()
-		ctx.SetStatus(http.StatusInternalServerError).Json("time out")
-		ctx.SetHasTimeout()
+		ctx.ISetStatus(http.StatusInternalServerError).IJson("time out")
 	}
 
-	ctx.SetStatus(http.StatusOK).Json(map[string]any{
+	ctx.ISetStatus(http.StatusOK).IJson(map[string]any{
 		"code": 0,
 	})
 	return nil
