@@ -6,6 +6,7 @@ import (
 
 	"github.com/awaketai/goweb/framework/gin"
 	"github.com/awaketai/goweb/framework/middleware"
+	"github.com/awaketai/goweb/provider/demo"
 )
 
 func RegRouter(core *gin.Engine) {
@@ -40,6 +41,12 @@ func RegRouter(core *gin.Engine) {
 	})
 	sub.GET("/list/all", func(c *gin.Context) {
 		c.ISetStatus(http.StatusOK).IJson("get list all")
+	})
+
+	sub.GET("/list/foo", func(c *gin.Context) {
+		sevice := c.MustMake(demo.Key).(demo.Service)
+		foo := sevice.GetFoo()
+		c.ISetOkStatus().IJson(foo)
 	})
 
 }

@@ -12,10 +12,13 @@ import (
 	"github.com/awaketai/goweb"
 	"github.com/awaketai/goweb/framework/gin"
 	"github.com/awaketai/goweb/framework/middleware"
+	"github.com/awaketai/goweb/provider/demo"
 )
 
 func main() {
 	core := gin.New()
+	// bind service
+	core.Bind(&demo.DemoServiceProvider{})
 	core.Use(gin.Recovery())
 	core.Use(middleware.Cost())
 	goweb.RegRouter(core)
