@@ -12,7 +12,7 @@ import (
 	"github.com/awaketai/goweb"
 	"github.com/awaketai/goweb/framework/gin"
 	"github.com/awaketai/goweb/framework/middleware"
-	"github.com/awaketai/goweb/provider/demo"
+	"github.com/awaketai/goweb/app/provider/demo"
 )
 
 func main() {

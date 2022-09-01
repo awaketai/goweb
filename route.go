@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/awaketai/goweb/app/provider/demo"
 	"github.com/awaketai/goweb/framework/gin"
 	"github.com/awaketai/goweb/framework/middleware"
-	"github.com/awaketai/goweb/provider/demo"
 )
 
 func RegRouter(core *gin.Engine) {
