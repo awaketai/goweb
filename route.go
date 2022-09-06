@@ -44,8 +44,8 @@ func RegRouter(core *gin.Engine) {
 	})
 
 	sub.GET("/list/foo", func(c *gin.Context) {
-		sevice := c.MustMake(demo.Key).(demo.Service)
-		foo := sevice.GetFoo()
+		sevice := c.MustMake(demo.DemoKey).(demo.DemoService)
+		foo := sevice.GetAllStudent()
 		c.ISetOkStatus().IJson(foo)
 	})
 

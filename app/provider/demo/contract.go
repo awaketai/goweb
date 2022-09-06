@@ -1,12 +1,12 @@
 package demo
 
 // 关键字凭证
-const Key = "web:demo"
+const DemoKey = "web:demo"
 
-type Service interface {
-	GetFoo() Foo
+type IService interface {
+	GetAllStudent() []Student
 }
-
-type Foo struct {
+type Student struct {
+	ID   int
 	Name string
 }

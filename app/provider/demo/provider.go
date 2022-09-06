@@ -7,10 +7,12 @@ import (
 )
 
 type DemoServiceProvider struct {
+	framework.ServiceProvider
+	c framework.Container
 }
 
 func (dsp *DemoServiceProvider) Name() string {
-	return Key
+	return DemoKey
 }
 
 func (dsp *DemoServiceProvider) Register(container framework.Container) framework.NewInstance {
@@ -23,10 +25,11 @@ func (dsp *DemoServiceProvider) IsDefer() bool {
 }
 
 func (dsp *DemoServiceProvider) Params(container framework.Container) []any {
-	return []any{container}
+	return []any{dsp.c}
 }
 
 func (dsp *DemoServiceProvider) Boot(container framework.Container) error {
+	dsp.c = container
 	fmt.Println("demo service boot execute")
 	return nil
 }

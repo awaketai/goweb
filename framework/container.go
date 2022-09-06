@@ -49,7 +49,7 @@ func (con *WebContainer) Bind(provider ServiceProvider) error {
 		}
 		params := provider.Params(con)
 		method := provider.Register(con)
-		instance, err := method(params)
+		instance, err := method(params...)
 		if err != nil {
 			return err
 		}

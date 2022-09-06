@@ -8,7 +8,7 @@ import (
 
 type DemoService struct {
 	// 实现接口
-	Service
+	IService
 	// 参数
 	container framework.Container
 }
@@ -20,8 +20,15 @@ func NewDemoService(params ...any) (any, error) {
 
 }
 
-func (service *DemoService) GetFoo() Foo {
-	return Foo{
-		Name: "i am foo",
+func (service *DemoService) GetAllStudent() []Student {
+	return []Student{
+		{
+			ID:   1,
+			Name: "foo",
+		},
+		{
+			ID:   2,
+			Name: "bar",
+		},
 	}
 }
