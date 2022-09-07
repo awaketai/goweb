@@ -14,7 +14,7 @@ func main() {
 	container := framework.NewWebContainer()
 	// service bind
 	container.Bind(&app.AppProvider{})
-	engine, err := http.NewHttpEngine()
+	engine, err := http.NewHttpEngine(container)
 	if err != nil {
 		log.Fatalf("start http engine error:%v", err)
 	}

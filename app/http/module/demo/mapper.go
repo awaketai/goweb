@@ -1,9 +1,11 @@
 package demo
 
-import "github.com/awaketai/goweb/app/provider/demo"
+import (
+	"github.com/awaketai/goweb/app/provider/demo"
+)
 
 func UserModelsToUserDTOs(models []UserModel) []UserDTO {
-	ret := make([]UserDTO, len(models))
+	ret := make([]UserDTO, 0)
 	for _, model := range models {
 		t := UserDTO{
 			ID:   model.UserId,
@@ -15,7 +17,7 @@ func UserModelsToUserDTOs(models []UserModel) []UserDTO {
 }
 
 func StudentToUserDTOs(students []demo.Student) []UserDTO {
-	ret := make([]UserDTO, len(students))
+	ret := make([]UserDTO, 0)
 	for _, student := range students {
 		t := UserDTO{
 			ID:   student.ID,

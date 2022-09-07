@@ -80,7 +80,7 @@ func (con *WebContainer) make(key string, params []any, forceNew bool) (any, err
 	defer con.lock.RUnlock()
 	provider := con.findServiceProvider(key)
 	if provider == nil {
-		return nil, fmt.Errorf("contract " + key + "not register")
+		return nil, fmt.Errorf("contract [" + key + "] not register")
 
 	}
 	if forceNew {
