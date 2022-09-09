@@ -12,6 +12,7 @@ import (
 type App struct {
 	container  framework.Container
 	baseFolder string
+	appId      string // 当前app唯一id
 }
 
 func (app App) Version() string {
@@ -93,4 +94,8 @@ func (app App) RuntimeFolder() string {
 // TestFolder app/test
 func (app App) TestFolder() string {
 	return filepath.Join(app.BaseFolder(), "test")
+}
+
+func (app App) AppId() string {
+	return app.appId
 }

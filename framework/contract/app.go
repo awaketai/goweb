@@ -15,8 +15,8 @@ type App interface {
 	ProviderFolder() string
 	// MiddlewareFolder middleware folder
 	MiddlewareFolder() string
-	// ConmmandFolder command folder
-	ConmmandFolder() string
+	// CommandFolder command folder
+	CommandFolder() string
 	// RuntimeFolder
 	RuntimeFolder() string
 	TestFolder() string

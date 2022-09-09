@@ -1,6 +1,9 @@
 package util
 
-import "os"
+import (
+	"os"
+	"syscall"
+)
 
 // GetExecDir return absolute directory by invoker
 func GetExecDir() (string, error) {
@@ -9,4 +12,16 @@ func GetExecDir() (string, error) {
 		return "", err
 	}
 	return file, nil
+}
+
+func CheckProcessExists(pid int) (bool, error) {
+	process, err := os.FindProcess(pid)
+	if err != nil {
+		return false, err
+	}
+	err = process.Signal(syscall.Signal(0))
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

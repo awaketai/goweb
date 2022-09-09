@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/awaketai/goweb/framework"
+	"github.com/robfig/cron/v3"
 	flag "github.com/spf13/pflag"
 )
 
@@ -40,6 +41,11 @@ type FParseErrWhitelist flag.ParseErrorsWhitelist
 type Command struct {
 	// web container
 	container framework.Container
+	// Cron
+	Cron *cron.Cron
+	// cron command info
+	CronSpecs []CronSpec
+	// cron info
 	// Use is the one-line usage message.
 	// Recommended syntax is as follow:
 	//   [ ] identifies an optional argument. Arguments that are not enclosed in brackets are required.
