@@ -1,7 +1,6 @@
 package app
 
 import (
-	"flag"
 	"fmt"
 	"path/filepath"
 
@@ -31,12 +30,6 @@ func NewApp(params ...any) (any, error) {
 func (app App) BaseFolder() string {
 	if app.baseFolder != "" {
 		return app.baseFolder
-	}
-	var baseFolder string
-	flag.StringVar(&baseFolder, "base_folder", "", "framework base folder,default current")
-	flag.Parse()
-	if baseFolder != "" {
-		return baseFolder
 	}
 	// 获取当前路径
 	currentDir, err := util.GetExecDir()
