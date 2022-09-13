@@ -6,12 +6,13 @@ import (
 
 	"github.com/awaketai/goweb/framework"
 	"github.com/awaketai/goweb/framework/util"
+	"github.com/google/uuid"
 )
 
 type App struct {
 	container  framework.Container
 	baseFolder string
-	appId      string // 当前app唯一id
+	appID      string // 当前app唯一id
 }
 
 func (app App) Version() string {
@@ -24,7 +25,7 @@ func NewApp(params ...any) (any, error) {
 	}
 	container := params[0].(framework.Container)
 	baseFolder := params[1].(string)
-	return App{baseFolder: baseFolder, container: container}, nil
+	return App{baseFolder: baseFolder, container: container, appID: uuid.NewString()}, nil
 }
 
 func (app App) BaseFolder() string {
@@ -89,6 +90,6 @@ func (app App) TestFolder() string {
 	return filepath.Join(app.BaseFolder(), "test")
 }
 
-func (app App) AppId() string {
-	return app.appId
+func (app App) AppID() string {
+	return app.appID
 }

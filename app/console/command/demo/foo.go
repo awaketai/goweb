@@ -20,7 +20,7 @@ var FooCommand = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// container := cmd.GetContainer()
 		// log.Println(container)
-		log.Println("execute foo command")
+		log.Println("foo_func_test")
 		return nil
 	},
 }

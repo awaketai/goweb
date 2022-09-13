@@ -20,4 +20,6 @@ type App interface {
 	// RuntimeFolder
 	RuntimeFolder() string
 	TestFolder() string
+	// AppID
+	AppID() string
 }
