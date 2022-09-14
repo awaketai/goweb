@@ -39,10 +39,10 @@ func NewWebContainer() *WebContainer {
 }
 
 func (con *WebContainer) Bind(provider ServiceProvider) error {
-	con.lock.Lock()
-	defer con.lock.Unlock()
 	key := provider.Name()
+	con.lock.Lock()
 	con.providers[key] = provider
+	con.lock.Unlock()
 	if !provider.IsDefer() {
 		if err := provider.Boot(con); err != nil {
 			return err
@@ -53,7 +53,9 @@ func (con *WebContainer) Bind(provider ServiceProvider) error {
 		if err != nil {
 			return err
 		}
+		con.lock.Lock()
 		con.instances[key] = instance
+		con.lock.Unlock()
 	}
 	return nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/awaketai/goweb/app/console"
@@ -8,6 +9,7 @@ import (
 	"github.com/awaketai/goweb/framework"
 	"github.com/awaketai/goweb/framework/provider/app"
 	"github.com/awaketai/goweb/framework/provider/distributed"
+	"github.com/awaketai/goweb/framework/provider/env"
 	"github.com/awaketai/goweb/framework/provider/kernel"
 )
 
@@ -16,6 +18,8 @@ func main() {
 	// service bind
 	container.Bind(&app.AppProvider{})
 	container.Bind(&distributed.LocalDistributedProvider{})
+	err := container.Bind(&env.WebEnvProvider{})
+	fmt.Println("e:", err)
 	engine, err := http.NewHttpEngine(container)
 	if err != nil {
 		log.Fatalf("start http engine error:%v", err)
