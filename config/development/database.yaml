@@ -1,0 +1,8 @@
+mysql: 
+  host: 127.0.0.1
+  user: admin
+  # DB_PASSWORD=123 ./gw app start will be covered by command arg
+  # password: env(DB_PASSWORD)
+  password: abcdef
+  timeout: 1
+  readtime: 2.3

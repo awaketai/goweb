@@ -2,6 +2,7 @@ package demo
 
 import (
 	"github.com/awaketai/goweb/app/provider/demo"
+	"github.com/awaketai/goweb/framework/contract"
 	"github.com/awaketai/goweb/framework/gin"
 )
 
@@ -14,6 +15,7 @@ func Register(r *gin.Engine) error {
 	r.Bind(&demo.DemoServiceProvider{})
 	r.GET("/demo/demo", api.Demo)
 	r.GET("/demo/demo2", api.Demo2)
+	r.GET("/demo/pwd", api.Pwd)
 	r.POST("/demo/demoPost", api.DemoPost)
 	return nil
 }
@@ -27,6 +29,12 @@ func (api *DemoApi) Demo(c *gin.Context) {
 	users := api.service.GetUsers()
 	userDTO := UserModelsToUserDTOs(users)
 	c.JSON(200, userDTO)
+}
+
+func (api *DemoApi) Pwd(c *gin.Context) {
+	service := c.MustMake(contract.ConfigKey).(contract.Config)
+	password := service.GetString("database.mysql.password")
+	c.JSON(200, password)
 }
 
 func (apo *DemoApi) Demo2(c *gin.Context) {

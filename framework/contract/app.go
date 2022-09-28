@@ -22,4 +22,6 @@ type App interface {
 	TestFolder() string
 	// AppID
 	AppID() string
+	// LoadAppConfig
+	LoadAppConfig(map[string]string)
 }
