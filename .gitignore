@@ -1,4 +1,5 @@
 .idea
 gw
 ./build/bin/
-storage/*
+/storage/log
+/storage/runtime
