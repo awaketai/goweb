@@ -17,6 +17,7 @@ func Register(r *gin.Engine) error {
 	r.GET("/demo/demo2", api.Demo2)
 	r.GET("/demo/pwd", api.Pwd)
 	r.POST("/demo/demoPost", api.DemoPost)
+
 	return nil
 }
 
@@ -26,6 +27,11 @@ func NewDemoApi() *DemoApi {
 }
 
 func (api *DemoApi) Demo(c *gin.Context) {
+	log := c.MustMake(contract.LogKey).(contract.Log)
+	m := make(map[string]any)
+	m["f1"] = "f1val"
+	m["f2"] = 23
+	log.Info(c, "demo/demo", m)
 	users := api.service.GetUsers()
 	userDTO := UserModelsToUserDTOs(users)
 	c.JSON(200, userDTO)

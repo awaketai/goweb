@@ -30,6 +30,8 @@ type WebContainer struct {
 	lock      sync.RWMutex
 }
 
+var _ Container = new(WebContainer)
+
 func NewWebContainer() *WebContainer {
 	return &WebContainer{
 		providers: make(map[string]ServiceProvider),
@@ -124,4 +126,8 @@ func (con *WebContainer) newInstance(provider ServiceProvider, params []any) (an
 		return nil, err
 	}
 	return instance, nil
+}
+
+func (con *WebContainer) IsBind(key string) bool {
+	return con.findServiceProvider(key) != nil
 }

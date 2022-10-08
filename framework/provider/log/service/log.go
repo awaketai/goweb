@@ -37,10 +37,8 @@ func (log *WebLog) logf(level contract.LogLevel, ctx context.Context, msg string
 	// 使用ctxFielder获取context中的信息
 	if log.ctxFielder != nil {
 		t := log.ctxFielder(ctx)
-		if t != nil {
-			for k, v := range t {
-				fs[k] = v
-			}
+		for k, v := range t {
+			fs[k] = v
 		}
 	}
 	// 如果绑定了trace服务，获取trace信息

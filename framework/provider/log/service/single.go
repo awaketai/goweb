@@ -52,5 +52,6 @@ func NewWebSingleLog(params ...any) (any, error) {
 	}
 	log.SetOutput(fd)
 	log.c = container
+	log.fd = fd
 	return log, nil
 }
