@@ -20,6 +20,8 @@ type App interface {
 	// RuntimeFolder
 	RuntimeFolder() string
 	TestFolder() string
+	// AppFolder 定义业务代码所在目录
+	AppFolder() string
 	// AppID
 	AppID() string
 	// LoadAppConfig

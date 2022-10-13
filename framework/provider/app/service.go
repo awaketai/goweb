@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/awaketai/goweb/framework"
+	"github.com/awaketai/goweb/framework/contract"
 	"github.com/awaketai/goweb/framework/util"
 	"github.com/google/uuid"
 )
@@ -16,6 +17,8 @@ type App struct {
 
 	configMap map[string]string // 配置加载
 }
+
+var _ contract.App = new(App)
 
 func (app App) Version() string {
 	return "0.0.3"
@@ -125,6 +128,13 @@ func (app App) TestFolder() string {
 		return val
 	}
 	return filepath.Join(app.BaseFolder(), "test")
+}
+
+func (app App) AppFolder() string {
+	if val, ok := app.configMap["app_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "app")
 }
 
 func (app App) AppID() string {
