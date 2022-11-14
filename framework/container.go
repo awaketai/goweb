@@ -131,3 +131,12 @@ func (con *WebContainer) newInstance(provider ServiceProvider, params []any) (an
 func (con *WebContainer) IsBind(key string) bool {
 	return con.findServiceProvider(key) != nil
 }
+
+func (con *WebContainer) NameList() []string {
+	ret := []string{}
+	for _, provider := range con.providers {
+		name := provider.Name()
+		ret = append(ret, name)
+	}
+	return ret
+}

@@ -1,0 +1,8 @@
+driver: rotate
+level: trace
+file: web.log
+rotate_count: 10 # 最多日志文件个数
+rotate_size: 120000 # 每个日志文件大小
+rotate_time: "1m" # 切割时间
+max_age: "10d" # 文件保存时间
+date_format: "%Y-%m-%d-%H-%M" # 文件后缀格式

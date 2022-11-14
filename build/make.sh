@@ -6,6 +6,7 @@ appFile=${serviceName}
 
 # exit immediately if a command exists with a non-zero status
 set -e
+rm -f ../gw
 go mod tidy
 # build
 mkdir -p ./bin/
