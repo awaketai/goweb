@@ -71,7 +71,7 @@ var providerCreateCommand = &cobra.Command{
 		}
 		{
 			prompt := &survey.Input{
-				Message: "请输科服务所在目录名称：",
+				Message: "请输入服务所在目录名称：",
 			}
 			err := survey.AskOne(prompt, &folder)
 			if err != nil {
@@ -100,7 +100,7 @@ var providerCreateCommand = &cobra.Command{
 			return nil
 		}
 
-		// create assign file
+		// create assign file /gw/app/provider/{user}
 		if err := os.Mkdir(filepath.Join(pFolder, folder), 0700); err != nil {
 			return err
 		}
