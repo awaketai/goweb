@@ -13,5 +13,5 @@ func AddKernelCommands(root *cobra.Command) {
 	root.AddCommand(initCmdCommand())
 	// create middleware command
 	root.AddCommand(initMiddlewareCommand())
-
+	root.AddCommand(initNewProjectCommand())
 }
