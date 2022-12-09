@@ -4,4 +4,4 @@ make build
 
 cd ..
 
-./gw new
+./gw swagger gen

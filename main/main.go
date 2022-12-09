@@ -17,7 +17,7 @@ import (
 func main() {
 	container := framework.NewWebContainer()
 	// service bind
-	container.Bind(&app.AppProvider{BaseFolder: "./app"})
+	container.Bind(&app.AppProvider{})
 	container.Bind(&distributed.LocalDistributedProvider{})
 	container.Bind(&env.WebEnvProvider{})
 	container.Bind(&config.WebConfigProvider{})

@@ -26,6 +26,13 @@ func NewDemoApi() *DemoApi {
 	return &DemoApi{service: service}
 }
 
+// Demo godoc
+// @Summary 获取所有用户
+// @Description 获取所有用户
+// @Produce  json
+// @Tags demo
+// @Success 200 array []UserDTO
+// @Router /demo/demo [get]
 func (api *DemoApi) Demo(c *gin.Context) {
 	log := c.MustMake(contract.LogKey).(contract.Log)
 	m := make(map[string]any)
@@ -61,4 +68,18 @@ func (api *DemoApi) DemoPost(c *gin.Context) {
 		c.AbortWithError(500, err)
 	}
 	c.JSON(200, nil)
+}
+
+// Demo3  for godoc
+// @Summary 获取所有学生
+// @Description 获取所有学生，不进行分页
+// @Produce  json
+// @Tags demo
+// @Success 200 {array} []UserDTO
+// @Router /demo/demo3 [get]
+func (api *DemoApi) Demo3(c *gin.Context) {
+	demoProvider := c.MustMake(demo.DemoKey).(demo.IService)
+	students := demoProvider.GetAllStudent()
+	usersDTO := StudentToUserDTOs(students)
+	c.JSON(200, usersDTO)
 }
