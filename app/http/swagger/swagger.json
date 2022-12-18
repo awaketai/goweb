@@ -1,0 +1,96 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "goweb swagger",
+        "title": "goweb",
+        "termsOfService": "https:github.com/swaggo/swag",
+        "contact": {
+            "name": "asher",
+            "email": "awaketai@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http:"
+        },
+        "version": "1.1"
+    },
+    "basePath": "/",
+    "paths": {
+        "/demo/demo": {
+            "get": {
+                "description": "获取所有用户",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "demo"
+                ],
+                "summary": "获取所有用户",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/demo.UserDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/demo/demo3": {
+            "get": {
+                "description": "获取所有学生，不进行分页",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "demo"
+                ],
+                "summary": "获取所有学生",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/demo.UserDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "demo.UserDTO": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "x-extension-openapi": "{\"example\": \"value on a json format\"}"
+        },
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
+}

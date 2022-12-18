@@ -2,12 +2,10 @@ package command
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 
 	"github.com/awaketai/goweb/framework/cobra"
 	"github.com/awaketai/goweb/framework/contract"
-	"github.com/awaketai/goweb/framework/util"
 	"github.com/swaggo/swag/gen"
 )
 
@@ -36,12 +34,6 @@ var swaggerGenCommand = &cobra.Command{
 		fmt.Println("app:", appService.AppFolder())
 		outputDir := filepath.Join(appService.AppFolder(), "http", "swagger")
 		fmt.Println("file:", outputDir)
-		if exists, _ := util.Exists(outputDir); !exists {
-			err := os.MkdirAll(outputDir, 0644)
-			if err != nil {
-				return err
-			}
-		}
 		// 生成swagger.json
 		httpFolder := filepath.Join(appService.AppFolder(), "http")
 		conf := &gen.Config{
@@ -63,8 +55,12 @@ var swaggerGenCommand = &cobra.Command{
 			MarkdownFilesDir: httpFolder,
 			// 是否应该在docs.go中生成时间戳
 			GeneratedTime: false,
+			OutputTypes: []string{
+				"go", "json", "yaml",
+			},
 		}
 		err := gen.New().Build(conf)
+
 		if err != nil {
 			return fmt.Errorf("swag gen err:%v", err)
 		}

@@ -43,6 +43,7 @@ var appStartCommand = &cobra.Command{
 			Handler: core,
 			Addr:    ":8080",
 		}
+		log.Println("serve listening:8080")
 		go func() {
 			server.ListenAndServe()
 		}()

@@ -1,0 +1,64 @@
+basePath: /
+definitions:
+  demo.UserDTO:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact:
+    email: awaketai@gmail.com
+    name: asher
+  description: goweb swagger
+  license:
+    name: Apache 2.0
+    url: 'http:'
+  termsOfService: https:github.com/swaggo/swag
+  title: goweb
+  version: "1.1"
+paths:
+  /demo/demo:
+    get:
+      description: 获取所有用户
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/demo.UserDTO'
+              type: array
+            type: array
+      summary: 获取所有用户
+      tags:
+      - demo
+  /demo/demo3:
+    get:
+      description: 获取所有学生，不进行分页
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/demo.UserDTO'
+              type: array
+            type: array
+      summary: 获取所有学生
+      tags:
+      - demo
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+    x-extension-openapi: '{"example": "value on a json format"}'
+  BasicAuth:
+    type: basic
+swagger: "2.0"

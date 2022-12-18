@@ -3,5 +3,7 @@ cd build
 make build
 
 cd ..
-
-./gw swagger gen
+# start http server
+# ./gw app start 
+# generate swagger file
+./gw swagger  gen

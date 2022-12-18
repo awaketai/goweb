@@ -26,12 +26,12 @@ func NewDemoApi() *DemoApi {
 	return &DemoApi{service: service}
 }
 
-// Demo godoc
+// Demo for godoc
 // @Summary 获取所有用户
 // @Description 获取所有用户
 // @Produce  json
 // @Tags demo
-// @Success 200 array []UserDTO
+// @Success 200 {array} []demo.UserDTO
 // @Router /demo/demo [get]
 func (api *DemoApi) Demo(c *gin.Context) {
 	log := c.MustMake(contract.LogKey).(contract.Log)
