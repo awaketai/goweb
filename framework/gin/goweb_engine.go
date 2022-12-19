@@ -14,3 +14,7 @@ func (engine *Engine) Bind(provider framework.ServiceProvider) error {
 func (engine *Engine) IsBind(key string) bool {
 	return engine.container.IsBind(key)
 }
+
+func (engine *Engine) GetContainer() framework.Container {
+	return engine.container
+}
