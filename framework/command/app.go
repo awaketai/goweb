@@ -59,13 +59,13 @@ var appStartCommand = &cobra.Command{
 		container := cmd.GetContainer()
 		kernelService := container.MustMake(contract.KernelKey).(contract.Kernel)
 		core := kernelService.HttpEngine()
-
+		configService := container.MustMake(contract.ConfigKey).(contract.Config)
 		if appAddress == "" {
 			envService := container.MustMake(contract.EnvKey).(contract.Env)
 			if envService.Get("ADDRESS") != "" {
 				appAddress = envService.Get("ADDRESS")
 			} else {
-				configService := container.MustMake(contract.ConfigKey).(contract.Config)
+
 				if configService.IsExists("app.address") {
 					appAddress = configService.GetString("app.address")
 				} else {
@@ -78,8 +78,11 @@ var appStartCommand = &cobra.Command{
 		}
 		fmt.Println("listening:", appAddress)
 		server := &http.Server{
-			Handler: core,
-			Addr:    appAddress,
+			Handler:           core,
+			Addr:              appAddress,
+			ReadHeaderTimeout: time.Duration(configService.GetInt("http.server.read_header_timeout")),
+			ReadTimeout:       time.Duration(configService.GetInt("http.server.read_timeout")),
+			IdleTimeout:       time.Duration(configService.GetInt("http.server.idle_timeout")),
 		}
 
 		appService := container.MustMake(contract.AppKey).(contract.App)
@@ -159,8 +162,10 @@ var appRestartCommand = &cobra.Command{
 		appService := container.MustMake(contract.AppKey).(contract.App)
 		serverPidFile := filepath.Join(appService.RuntimeFolder(), "app.pid")
 		content, err := ioutil.ReadFile(serverPidFile)
+
 		if err != nil {
-			return err
+
+			return fmt.Errorf("read file err:%w", err)
 		}
 		if len(content) != 0 {
 			pid, err := strconv.Atoi(string(content))

@@ -1,0 +1,13 @@
+server:
+  #                                                           |---HTTP Handler---|
+  # connection accpeted [wait] [TLS handshake] [Req. headers]  [Req.body] [Response]
+  #                     |                      <-          ->  |        |         |
+  #                     |                    |ReadHeaderTimeout|        |         |
+  #                     |<-               ReadTimeout                 ->|         | 
+  #                                                            |<-TimeoutHandler->|
+  #
+  # unit:s
+  read_header_timeout: 1
+  read_timeout: 2
+  timeout_handler: 1
+  idle_timeout: 2
