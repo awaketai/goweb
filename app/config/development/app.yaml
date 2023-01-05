@@ -1,2 +1,3 @@
 swagger: true
-address: 8082
+address: 8081
+close_wait: 3

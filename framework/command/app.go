@@ -77,12 +77,13 @@ var appStartCommand = &cobra.Command{
 			appAddress = ":" + appAddress
 		}
 		fmt.Println("listening:", appAddress)
+		// ns -> s: t*1000000000
 		server := &http.Server{
 			Handler:           core,
 			Addr:              appAddress,
-			ReadHeaderTimeout: time.Duration(configService.GetInt("http.server.read_header_timeout")),
-			ReadTimeout:       time.Duration(configService.GetInt("http.server.read_timeout")),
-			IdleTimeout:       time.Duration(configService.GetInt("http.server.idle_timeout")),
+			ReadHeaderTimeout: time.Duration(configService.GetInt("http.server.read_header_timeout")) * 1000000000,
+			ReadTimeout:       time.Duration(configService.GetInt("http.server.read_timeout")) * 1000000000,
+			IdleTimeout:       time.Duration(configService.GetInt("http.server.idle_timeout")) * 1000000000,
 		}
 
 		appService := container.MustMake(contract.AppKey).(contract.App)

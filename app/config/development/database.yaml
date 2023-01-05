@@ -1,3 +1,40 @@
+conn_max_idle: 10 # common config:max idle connection num
+conn_max_open: 100 # common config:max connections
+conn_max_lifetime: 1h # common config:max connection lifetime
+protocol: tcp # common config:protocol
+loc: Local # common config:timezone
+
+default:
+  driver: mysql # connection driver
+  dsn: "" # if dsn not empty,other config will be invalid
+  host: localhost # host
+  port: 3306
+  table_prefix:
+  engine: InnoDB
+  database: test
+  username: root
+  password: admin123
+  charset: utf8mb4
+  collation: utf8mb4_unicode_ci
+  timeout: 10s # connection timeout
+  read_timeout: 2s # read timeout
+  write_timeout: 2s # write timeout
+  parse_time: true # whether parse time
+  protocol: tcp
+  loc: Local
+  conn_max_idle: 10
+  conn_max_open: 20
+  conn_max_lifetime: 1h
+read:
+  driver: mysql # connection driver
+  dsn: "" # if dsn not empty,other config will be invalid
+  host: localhost # host
+  port: 3306
+  database: coredemo
+  username: admin
+  password: admin123
+  charset: utf8mb4
+  collation: utf8mb4_unicode_ci
 mysql: 
   host: 127.0.0.1
   user: admin

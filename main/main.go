@@ -12,6 +12,7 @@ import (
 	"github.com/awaketai/goweb/framework/provider/env"
 	"github.com/awaketai/goweb/framework/provider/kernel"
 	gwlog "github.com/awaketai/goweb/framework/provider/log"
+	"github.com/awaketai/goweb/framework/provider/orm"
 )
 
 func main() {
@@ -22,6 +23,7 @@ func main() {
 	container.Bind(&env.WebEnvProvider{})
 	container.Bind(&config.WebConfigProvider{})
 	container.Bind(&gwlog.WebLogServiceProvider{})
+	container.Bind(&orm.GormProvider{})
 
 	engine, err := http.NewHttpEngine(container)
 	if err != nil {
