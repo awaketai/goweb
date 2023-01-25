@@ -6,7 +6,7 @@ import (
 
 const ORMKey = "web:orm"
 
-// ORMService input parameter
+// ORM ORMService input parameter
 type ORM interface {
 	GetDB(opt ...DBOption) (*gorm.DB, error)
 }

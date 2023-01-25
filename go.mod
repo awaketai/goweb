@@ -1,5 +1,7 @@
 module github.com/awaketai/goweb
 
+
+
 go 1.18
 
 require (

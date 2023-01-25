@@ -85,3 +85,18 @@ will be generated some file to app/http/swagger
 
 2.run app server,then serve will be listening port:8080,then browse: localhost:8080/swagger/index.html
 
+## Database use
+
+1.config
+
+the database config file app/config/{env}/database.yaml will be load,and database argument
+database.default will be load if config path not assignment.assign config path:
+
+```go
+gormService := c.MustMake(contract.ORMKey).(contract.ORM)
+gormService.GetDB(orm.WithConfigPath("database.default"))
+```
+when getdb success,we will get a gorm DB instance,use this DB instance,we can operate database,
+such as Migrate,Create,Update,Delete and so on. specific doc:[gorm](https://gorm.io/)
+
+simple database operate demo reference:app/http/module/demo/orm_demo.go

@@ -1,0 +1,47 @@
+GET www.baidu.com
+
+###
+GET https://www.baidu.com
+
+###
+POST https://www.pkslow.com/user HTTP/1.1
+Content-Type: application/json
+
+{
+    "name":"larry",
+    "age":18
+}
+
+### 
+curl --request GET \
+    --url https://www.baidu.com \
+    --header 'User-Agent: vscode-restclient'
+
+###
+@hostAddr = www.baidu.com
+
+GET {{hostAddr}} HTTP/1.1
+
+### 
+GET http://{{hostname}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"admin",
+    "password":{{password}}
+}
+
+###
+# @name loginAdmin
+POST http://{{hostname}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"admin",
+    "password":{{password}}
+}
+
+### 
+@token = {{loginAdmin.response.body.$.token}}
+GET http://{{hostname}}/admin HTTP/1.1
+Authorization: Bearer {{token}}

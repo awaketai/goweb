@@ -162,7 +162,7 @@ var appRestartCommand = &cobra.Command{
 		container := cmd.GetContainer()
 		appService := container.MustMake(contract.AppKey).(contract.App)
 		serverPidFile := filepath.Join(appService.RuntimeFolder(), "app.pid")
-		content, err := ioutil.ReadFile(serverPidFile)
+		content, err := os.ReadFile(serverPidFile)
 
 		if err != nil {
 
