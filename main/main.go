@@ -18,12 +18,12 @@ import (
 func main() {
 	container := framework.NewWebContainer()
 	// service bind
-	container.Bind(&app.AppProvider{})
+	container.Bind(&app.WebAppProvider{})
 	container.Bind(&distributed.LocalDistributedProvider{})
 	container.Bind(&env.WebEnvProvider{})
 	container.Bind(&config.WebConfigProvider{})
-	container.Bind(&gwlog.WebLogServiceProvider{})
-	container.Bind(&orm.GormProvider{})
+	container.Bind(&gwlog.WebLogProvider{})
+	container.Bind(&orm.WebGormProvider{})
 
 	engine, err := http.NewHttpEngine(container)
 	if err != nil {

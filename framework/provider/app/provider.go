@@ -5,27 +5,30 @@ import (
 	"github.com/awaketai/goweb/framework/contract"
 )
 
-// AppProvider implement ServiceProvider interface
-type AppProvider struct {
+// WebAppProvider implement ServiceProvider interface
+// provider struct name:Web[ProviderName]Provider
+// register func name:NewWeb[ProviderName]Service
+// contract key name: Web:ProviderName="web:ProviderName"
+type WebAppProvider struct {
 	BaseFolder string
 }
 
-func (provider *AppProvider) Name() string {
+func (provider *WebAppProvider) Name() string {
 	return contract.AppKey
 }
 
-func (provider *AppProvider) Params(container framework.Container) []any {
+func (provider *WebAppProvider) Params(container framework.Container) []any {
 	return []any{container, provider.BaseFolder}
 }
 
-func (provider *AppProvider) Register(container framework.Container) framework.NewInstance {
+func (provider *WebAppProvider) Register(container framework.Container) framework.NewInstance {
 	return NewApp
 }
 
-func (provider *AppProvider) Boot(framework.Container) error {
+func (provider *WebAppProvider) Boot(framework.Container) error {
 	return nil
 }
 
-func (provider *AppProvider) IsDefer() bool {
+func (provider *WebAppProvider) IsDefer() bool {
 	return false
 }

@@ -5,26 +5,26 @@ import (
 	"github.com/awaketai/goweb/framework/contract"
 )
 
-type GormProvider struct {
+type WebGormProvider struct {
 }
 
-func (gorm *GormProvider) Register(container framework.Container) framework.NewInstance {
+func (gorm *WebGormProvider) Register(container framework.Container) framework.NewInstance {
 	return NewWebOrm
 }
 
-func (gorm *GormProvider) Boot(container framework.Container) error {
+func (gorm *WebGormProvider) Boot(container framework.Container) error {
 	return nil
 }
 
 // IsDefer load delay
-func (gorm *GormProvider) IsDefer() bool {
+func (gorm *WebGormProvider) IsDefer() bool {
 	return true
 }
 
-func (gorm *GormProvider) Params(container framework.Container) []any {
+func (gorm *WebGormProvider) Params(container framework.Container) []any {
 	return []any{container}
 }
 
-func (gorm *GormProvider) Name() string {
+func (gorm *WebGormProvider) Name() string {
 	return contract.ORMKey
 }

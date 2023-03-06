@@ -10,7 +10,7 @@ import (
 	"github.com/awaketai/goweb/framework/provider/log/service"
 )
 
-type WebLogServiceProvider struct {
+type WebLogProvider struct {
 	framework.ServiceProvider
 	Driver     string
 	Level      contract.LogLevel
@@ -20,7 +20,7 @@ type WebLogServiceProvider struct {
 	Output io.Writer
 }
 
-func (provider *WebLogServiceProvider) Register(c framework.Container) framework.NewInstance {
+func (provider *WebLogProvider) Register(c framework.Container) framework.NewInstance {
 	if provider.Driver == "" {
 		tcs, err := c.Make(contract.ConfigKey)
 		if err != nil {
@@ -44,15 +44,15 @@ func (provider *WebLogServiceProvider) Register(c framework.Container) framework
 	}
 }
 
-func (provider *WebLogServiceProvider) Boot(container framework.Container) error {
+func (provider *WebLogProvider) Boot(container framework.Container) error {
 	return nil
 }
 
-func (provider *WebLogServiceProvider) IsDefer() bool {
+func (provider *WebLogProvider) IsDefer() bool {
 	return false
 }
 
-func (provider *WebLogServiceProvider) Params(container framework.Container) []any {
+func (provider *WebLogProvider) Params(container framework.Container) []any {
 	configService := container.MustMake(contract.ConfigKey).(contract.Config)
 	if provider.Formatter == nil {
 		provider.Formatter = formatter.TextFormatter
@@ -76,7 +76,7 @@ func (provider *WebLogServiceProvider) Params(container framework.Container) []a
 	return []any{container, provider.Level, provider.CtxFielder, provider.Formatter, provider.Output}
 }
 
-func (provider *WebLogServiceProvider) Name() string {
+func (provider *WebLogProvider) Name() string {
 	return contract.LogKey
 }
 
