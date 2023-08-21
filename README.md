@@ -100,3 +100,9 @@ when getdb success,we will get a gorm DB instance,use this DB instance,we can op
 such as Migrate,Create,Update,Delete and so on. specific doc:[gorm](https://gorm.io/)
 
 simple database operate demo reference:app/http/module/demo/orm_demo.go
+
+## sponsor
+
+Thanks to [jetbrains](https://www.jetbrains.com/?from=goweb) for supporting this project
+
+![jetbrain](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)

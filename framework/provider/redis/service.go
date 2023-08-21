@@ -39,6 +39,8 @@ func (rdService WebRedisService) GetClient(option ...contract.RedisOption) (*red
 		rdService.lock.RUnlock()
 		return db, nil
 	}
+	rdService.lock.RUnlock()
+
 	rdService.lock.Lock()
 	client := redis.NewClient(config.Options)
 	rdService.clients[key] = client
