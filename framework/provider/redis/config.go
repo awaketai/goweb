@@ -12,7 +12,7 @@ import (
 func GetBaseConfig(c framework.Container) *contract.RedisConfig {
 	logService := c.MustMake(contract.LogKey).(contract.Log)
 	config := &contract.RedisConfig{Options: &redis.Options{}}
-	opt := WithConfigPath("redis")
+	opt := WithConfigPath("redis.write")
 	err := opt(c, config)
 	if err != nil {
 		logService.Error(context.Background(), "parse cache config error:"+err.Error(), nil)

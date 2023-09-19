@@ -105,4 +105,4 @@ simple database operate demo reference:app/http/module/demo/orm_demo.go
 
 Thanks to [jetbrains](https://www.jetbrains.com/?from=goweb) for supporting this project
 
-![jetbrain](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
+[![jetbrain](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg "Jetbrain")](https://www.jetbrains.com/?from=goweb)

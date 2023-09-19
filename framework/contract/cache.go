@@ -13,7 +13,7 @@ type RememberFunc func(ctx context.Context, container framework.Container) (any,
 
 type Cache interface {
 	// Get 获取某个key对应的值
-	Get(ctx context.Context, key string) (string, error)
+	Get(ctx context.Context, key string) (any, error)
 	// GetObj 获取某个key对应的对象, 对象必须实现 https://pkg.go.dev/encoding#BinaryUnMarshaler
 	GetObj(ctx context.Context, key string, obj any) error
 	// GetMany 获取某些key对应的值

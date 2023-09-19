@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"github.com/awaketai/goweb/framework"
 	"github.com/awaketai/goweb/framework/contract"
@@ -28,7 +29,7 @@ func NewRedisCache(params ...any) (any, error) {
 
 	// 获取redis配置，并实例化redis client
 	redisService := container.MustMake(contract.RedisKey).(contract.Redis)
-	client, err := redisService.GetClient(redis.WithConfigPath("redis"))
+	client, err := redisService.GetClient(redis.WithConfigPath("redis.write"))
 	if err != nil {
 		return nil, err
 	}
@@ -40,14 +41,27 @@ func NewRedisCache(params ...any) (any, error) {
 	return obj, nil
 }
 
-func (r *RedisCache) Get(ctx context.Context, key string) (string, error) {
-	var val string
-	err := r.GetObj(ctx, key, val)
-	if err != nil {
-		return "", nil
-	}
-	return val, nil
+type GetVal struct {
+	Val any
+}
 
+func (r *GetVal) MarshalBinary() ([]byte, error) {
+	return json.Marshal(r)
+}
+
+func (r *GetVal) UnmarshalBinary(data []byte) error {
+	r.Val = string(data)
+	return nil
+}
+
+func (r *RedisCache) Get(ctx context.Context, key string) (any, error) {
+	var val GetVal
+	err := r.GetObj(ctx, key, &val)
+	if err != nil {
+		return "", err
+	}
+	
+	return val.Val, nil
 }
 
 // GetObj 获取某个key对应的对象，对象必须实现https://pkg.go.dev/encoding#BinaryUnMarshaler

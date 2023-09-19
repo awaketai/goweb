@@ -18,6 +18,7 @@ func Register(r *gin.Engine) error {
 	r.GET("/demo/pwd", api.Pwd)
 	r.POST("/demo/demoPost", api.DemoPost)
 	r.GET("/demo/orm", api.OrmOperate)
+	r.GET("/demo/cache", api.DemoCache)
 
 	return nil
 }

@@ -32,7 +32,7 @@ func NewMemoryCache(params ...any) (any, error) {
 	return obj, nil
 }
 
-func (m *MemoryCache) Get(ctx context.Context, key string) (string, error) {
+func (m *MemoryCache) Get(ctx context.Context, key string) (any, error) {
 	var val string
 	if err := m.GetObj(ctx, key, &val); err != nil {
 		return "", nil
@@ -61,9 +61,9 @@ func (m *MemoryCache) GetObj(ctx context.Context, key string, obj any) error {
 	return ErrKeyNotFound
 }
 
-func (m *MemoryCache) GetMany(ctx context.Context, keys []string) (map[string]string, error) {
+func (m *MemoryCache) GetMany(ctx context.Context, keys []string) (map[string]any, error) {
 	errs := make([]string, 0, len(keys))
-	rets := make(map[string]string)
+	rets := make(map[string]any)
 	for _, key := range keys {
 		val, err := m.Get(ctx, key)
 		if err != nil {

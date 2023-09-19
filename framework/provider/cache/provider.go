@@ -51,5 +51,3 @@ func (c *WebCacheProvider) Params(container framework.Container) []any {
 func (c *WebCacheProvider) Name() string {
 	return contract.CacheKey
 }
-
-
