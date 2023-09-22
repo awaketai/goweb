@@ -1,0 +1,18 @@
+timeout: 1s
+network: tcp
+# eg01:use username and passwrod login the web server
+web-01:
+  host: 192.168.56.6
+  port: 22
+  username: k8s-master
+  password: admin123
+# eg02: use rsa key login the web server
+# and in this pattern,need to config the rsa_key file and 
+# know_host file to responsible for safety
+web-02:
+  host: 192.168.56.6
+  port: 22
+  username: k8s-worker
+  password: admin123
+  rsa_key: "/usr/local/.ssh/ids_rsa"
+  know_hosts: "/usr/local/.ssh/know_hosts"

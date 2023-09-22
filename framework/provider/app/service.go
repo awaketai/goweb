@@ -146,3 +146,12 @@ func (app App) LoadAppConfig(kv map[string]string) {
 		app.configMap[key] = val
 	}
 }
+
+// DeployFolder server deploy folder
+func (app App) DeployFolder() string {
+	if val,ok := app.configMap["deploy_folder"];ok {
+		return val
+	}
+
+	return filepath.Join(app.BaseFolder(),"deploy")
+}

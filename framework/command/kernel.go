@@ -16,4 +16,8 @@ func AddKernelCommands(root *cobra.Command) {
 	root.AddCommand(initNewProjectCommand())
 	// create swagger
 	root.AddCommand(initSwaggerCommand())
+	// build project
+	root.AddCommand(initBuildCommand())
+	// deploy command
+	root.AddCommand(initDeployCommand())
 }

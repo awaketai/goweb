@@ -1,0 +1,18 @@
+connections: # 要完成自动化部署的连接
+  - ssh.web-01
+remote_folder: "/home/k8s-master/goweb" # 远端部署的文件夹
+
+frontend: # 前端部署配置
+  pre_action: # 部署前置命令
+    - "pwd"
+  post_action: # 部署后置命令
+    - "pwd"
+backend: # 后端部署配置
+  goos: linux # 部署目标操作系统
+  goarch: amd64 # 部署目标CPU架构
+  pre_action: # 部署前置操作
+    - "pwd"
+  post_action: 
+    - "chmod 777 /home/k8s-master/goweb/gw"
+    - "/home/k8s-master/goweb/gw app restart"
+

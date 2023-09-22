@@ -26,4 +26,6 @@ type App interface {
 	AppID() string
 	// LoadAppConfig
 	LoadAppConfig(map[string]string)
+	// DeployFolder 部署产物文件夹
+	DeployFolder() string 
 }

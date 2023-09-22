@@ -60,7 +60,7 @@ func (r *RedisCache) Get(ctx context.Context, key string) (any, error) {
 	if err != nil {
 		return "", err
 	}
-	
+
 	return val.Val, nil
 }
 

@@ -3,3 +3,4 @@ gw
 ./build/bin/
 storage/log/
 storage/runtime/
+deploy

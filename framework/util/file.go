@@ -2,6 +2,7 @@ package util
 
 import (
 	"io"
+	"io/fs"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -12,14 +13,14 @@ import (
 // Exists 目录是否存在
 func Exists(path string) (bool, error) {
 	_, err := os.Stat(path)
-	if err != nil {
-		if os.IsExist(err) {
-			// 文件不存在err
-			return true, nil
-		}
-		return false, err
+	if err == nil {
+		return true, nil
 	}
-	return true, nil
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+
+	return false, err
 }
 
 // IsHiddenDir 路径是否隐藏路径
@@ -55,5 +56,35 @@ func DownloadFile(filepath, url string) error {
 	}
 	defer out.Close()
 	_, err = io.Copy(out, resp.Body)
+	return err
+}
+
+// CopyFile copy file to dest dir
+func CopyFile(source, dest string) error {
+	var data, err = os.ReadFile(source)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(dest, data, 0777)
+}
+
+func CopyFolder(source, dest string) error {
+	err := filepath.Walk(source, func(path string, info fs.FileInfo, err error) error {
+		relPath := strings.Replace(path,source,"",1)
+		if relPath == "" {
+			return nil
+		}
+		if info.IsDir() {
+			return os.Mkdir(filepath.Join(dest,relPath),0755)
+		}else{
+			data,err := os.ReadFile(filepath.Join(source,relPath))
+			if err != nil {
+				return err
+			}
+			return os.WriteFile(filepath.Join(dest,relPath),data,0777)
+		}
+	})
+	
 	return err
 }
