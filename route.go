@@ -1,52 +1,19 @@
 package goweb
 
-import (
-	"net/http"
-	"time"
-
-	"github.com/awaketai/goweb/app/provider/demo"
-	"github.com/awaketai/goweb/framework/gin"
-	"github.com/awaketai/goweb/framework/middleware"
-)
-
-func RegRouter(core *gin.Engine) {
-	core.GET("/user/login", middleware.Test1(), func(c *gin.Context) {
-		c.ISetStatus(http.StatusOK).IJson("login success")
-	})
-	core.GET("/shutdown", func(c *gin.Context) {
-		foo, _ := c.DefaultQueryString("foo", "def")
-		time.Sleep(10 * time.Second)
-		c.ISetOkStatus().IJson("ok,UserloginController:" + foo)
-	})
-
-	sub := core.Group("/subject")
-	sub.DELETE("/:id", func(c *gin.Context) {
-		id, ret := c.Params.Get("id")
-		if ret {
-			c.ISetStatus(http.StatusOK).IJson("delete-" + id)
-		} else {
-			c.ISetStatus(http.StatusOK).IJson("delete-" + id)
-		}
-	})
-	sub.PUT("/:id", func(c *gin.Context) {
-		c.ISetStatus(http.StatusOK).IJson("put :id")
-	})
-	sub.GET("/:id", middleware.Test2(), func(c *gin.Context) {
-		id, ret := c.Params.Get("id")
-		if ret {
-			c.ISetStatus(http.StatusOK).IJson("get :id" + id)
-		} else {
-			c.ISetStatus(http.StatusOK).IJson("get-" + id)
-		}
-	})
-	sub.GET("/list/all", func(c *gin.Context) {
-		c.ISetStatus(http.StatusOK).IJson("get list all")
-	})
-
-	sub.GET("/list/foo", func(c *gin.Context) {
-		sevice := c.MustMake(demo.DemoKey).(demo.DemoService)
-		foo := sevice.GetAllStudent()
-		c.ISetOkStatus().IJson(foo)
-	})
-
-}
+// use radix implement the route
+// 1.match http method
+// 2.match static route
+// 3.match batch prefix
+// - user/info -user/login
+// 4.match dynamic
+//
+// GET /home.html HTTP/1.1
+//Host: developer.mozilla.org
+//User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:50.0) Gecko/20100101 Firefox/50.0
+//Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+//Accept-Language: en-US,en;q=0.5
+//Accept-Encoding: gzip, deflate, br
+//Referer: https://developer.mozilla.org/testpage.html
+// GET    /home.html  HTTP/1.1
+// Method Request-URI HTTP-Version
+// route design:how to the framework user use the route
