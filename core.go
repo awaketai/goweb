@@ -28,7 +28,18 @@ func NewCore() *Core {
 }
 
 func (c *Core) ServerHTTP(w http.ResponseWriter, r *http.Request) {
-	// TODO
+	//
+	ctx := NewContext(w, r)
+	router := c.FindRuteByRequest(r)
+	if router == nil {
+		ctx.JSON(404, "not found")
+		return
+	}
+	// call func
+	if err := router(nil); err != nil {
+		ctx.JSON(500, "inner error")
+		return
+	}
 }
 
 func (c *Core) Get(url string, handler ControllerHandler) {
@@ -45,4 +56,17 @@ func (c *Core) Put(url string, handler ControllerHandler) {
 
 func (c *Core) Delete(url string, handler ControllerHandler) {
 	c.router[http.MethodDelete][strings.ToUpper(url)] = handler
+}
+
+func (c *Core) FindRuteByRequest(request *http.Request) ControllerHandler {
+	uri := request.URL.Path
+	method := request.Method
+	// [method][uri]
+	if methodHandlers, ok := c.router[strings.ToUpper(method)]; ok {
+		if handler, ok := methodHandlers[strings.ToUpper(uri)]; ok {
+			return handler
+		}
+	}
+
+	return nil
 }
