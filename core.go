@@ -42,6 +42,10 @@ func (c *Core) ServerHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (c *Core) Group(prefix string) IGroup {
+	return NewGroup(c, prefix)
+}
+
 func (c *Core) Get(url string, handler ControllerHandler) {
 	c.router[http.MethodGet][strings.ToUpper(url)] = handler
 }
