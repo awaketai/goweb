@@ -36,7 +36,7 @@ func (c *Core) ServerHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// call func
-	if err := router(nil); err != nil {
+	if err := router(ctx); err != nil {
 		ctx.JSON(500, "inner error")
 		return
 	}
