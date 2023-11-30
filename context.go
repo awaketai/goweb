@@ -12,6 +12,10 @@ type Context struct {
 	request        *http.Request
 	responseWriter http.ResponseWriter
 	ctx            context.Context
+	// handlers current request chain
+	handlers []ControllerHandler
+	// index arrive which node 
+	index int
 	isTimeout      bool
 	writeMux       *sync.Mutex
 }
@@ -21,6 +25,8 @@ func NewContext(w http.ResponseWriter, r *http.Request) *Context {
 		request:        r,
 		responseWriter: w,
 		ctx:            r.Context(),
+		// gurantee the first handler is the root handler
+		index: -1,
 		writeMux:       &sync.Mutex{},
 	}
 }
@@ -59,6 +65,22 @@ func (c *Context) Err() error {
 
 func (c *Context) Value(key any) any {
 	return c.BaseContext().Value(key)
+}
+
+// Next next handler
+func (c *Context) Next() error {
+	c.index++
+	if c.index < len(c.handlers) {
+		if err := c.handlers[c.index](c);err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (c *Context) SetHandlers(handlers []ControllerHandler){
+	c.handlers = handlers
 }
 
 func (c *Context) JSON(status int, obj any) error {

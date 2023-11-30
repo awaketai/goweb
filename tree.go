@@ -9,10 +9,15 @@ type Tree struct {
 	root *node
 }
 
+func NewTree() *Tree {
+	root := newNode()
+	return &Tree{root: root}
+}
+
 type node struct {
 	isLast  bool // if the node become the last match;or the node can be a independent url;if the last node
 	segment string
-	handler ControllerHandler // the node controller
+	handlers []ControllerHandler // the node controller
 	childs  []*node
 }
 
@@ -79,7 +84,7 @@ func newNode() *node {
 // /book/:student/age
 // /:/user/name
 // /:user/name/:age conflict
-func (t *Tree) AddRouter(uri string, handler ControllerHandler) error {
+func (t *Tree) AddRouter(uri string, handler []ControllerHandler) error {
 	n := t.root
 	if n.matchNode(uri) != nil {
 		return errors.New("route exists:" + uri)
@@ -108,7 +113,7 @@ func (t *Tree) AddRouter(uri string, handler ControllerHandler) error {
 			cnode.segment = segment
 			if isLast {
 				cnode.isLast = true
-				cnode.handler = handler
+				cnode.handlers = handler
 			}
 		}
 		n = objNode
@@ -117,11 +122,11 @@ func (t *Tree) AddRouter(uri string, handler ControllerHandler) error {
 	return nil
 }
 
-func (t *Tree) FindHandler(uri string) ControllerHandler{
+func (t *Tree) FindHandler(uri string) []ControllerHandler {
 	matchNode := t.root.matchNode(uri)
 	if matchNode == nil {
 		return nil
 	}
 
-	return matchNode.handler
+	return matchNode.handlers
 }
