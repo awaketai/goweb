@@ -1,4 +1,4 @@
-package goweb
+package framework2
 
 import (
 	"log"
@@ -46,8 +46,6 @@ func (c *Core) ServerHTTP(w http.ResponseWriter, r *http.Request) {
 func (c *Core) Use(middlewarese ...ControllerHandler){
 	c.middlewares = append(c.middlewares, middlewarese...)
 }
-
-
 
 func (c *Core) Group(prefix string) IGroup {
 	return NewGroup(c, prefix)

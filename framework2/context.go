@@ -1,4 +1,4 @@
-package goweb
+package framework2
 
 import (
 	"context"
@@ -14,10 +14,10 @@ type Context struct {
 	ctx            context.Context
 	// handlers current request chain
 	handlers []ControllerHandler
-	// index arrive which node 
-	index int
-	isTimeout      bool
-	writeMux       *sync.Mutex
+	// index arrive which node
+	index     int
+	isTimeout bool
+	writeMux  *sync.Mutex
 }
 
 func NewContext(w http.ResponseWriter, r *http.Request) *Context {
@@ -26,8 +26,8 @@ func NewContext(w http.ResponseWriter, r *http.Request) *Context {
 		responseWriter: w,
 		ctx:            r.Context(),
 		// gurantee the first handler is the root handler
-		index: -1,
-		writeMux:       &sync.Mutex{},
+		index:    -1,
+		writeMux: &sync.Mutex{},
 	}
 }
 
@@ -71,7 +71,7 @@ func (c *Context) Value(key any) any {
 func (c *Context) Next() error {
 	c.index++
 	if c.index < len(c.handlers) {
-		if err := c.handlers[c.index](c);err != nil {
+		if err := c.handlers[c.index](c); err != nil {
 			return err
 		}
 	}
@@ -79,7 +79,7 @@ func (c *Context) Next() error {
 	return nil
 }
 
-func (c *Context) SetHandlers(handlers []ControllerHandler){
+func (c *Context) SetHandlers(handlers []ControllerHandler) {
 	c.handlers = handlers
 }
 

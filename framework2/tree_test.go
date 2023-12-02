@@ -1,4 +1,4 @@
-package goweb
+package framework2
 
 import (
 	"testing"
