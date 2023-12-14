@@ -26,3 +26,7 @@ func SubjectGetController(c *framework2.Context) error {
 	c.JSON(200,"ok,SubjectGetController")
 	return nil
 }
+func SubjectNameController(c *framework2.Context) error {
+	c.JSON(200,"ok,SubjectNameController")
+	return nil
+}
