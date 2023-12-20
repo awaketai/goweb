@@ -3,8 +3,6 @@ package middleware
 import (
 	"errors"
 	"strings"
-
-	"github.com/awaketai/goweb/framework/provider/app"
 )
 
 // use gin cors
