@@ -3,6 +3,9 @@ package middleware
 import (
 	"errors"
 	"strings"
+	"time"
+
+	"github.com/awaketai/goweb/framework/gin"
 )
 
 // use gin cors
@@ -24,7 +27,7 @@ type Config struct {
 	ExposeHeaders []string
 	// Maxage indicates how long (in seconds) the results of a preflight request
 	//can be cached.
-	MaxAge                 int
+	MaxAge                 time.Duration
 	AllowWildcard          bool
 	AllowBrowserExtensions bool
 	// AllowWebSockets allows usage of websocket protocol
@@ -107,3 +110,66 @@ func (c *Config) Validate() error {
 
 	return nil
 }
+
+func (c *Config) parseWildcardRules() [][]string {
+	var wRUles [][]string
+	if !c.AllowWildcard {
+		return wRUles
+	}
+	for _, o := range c.AllowOrigins {
+		if !strings.Contains(o, "*") {
+			// find the wildcard
+			continue
+		}
+		if c := strings.Count(o, "*"); c > 1 {
+			panic(errors.New("only one * is allowed").Error())
+		}
+		i := strings.Index(o, "*")
+		if i == 0 {
+			wRUles = append(wRUles, []string{"*", o[1:]})
+			continue
+		}
+		if i == (len(o) - 1) {
+			wRUles = append(wRUles, []string{o[:i-1], "*"})
+			continue
+		}
+
+		wRUles = append(wRUles, []string{o[:i], o[i+1:]})
+	}
+
+	return wRUles
+}
+
+func DefaultConfig() Config {
+	return Config{
+		AllowMethods: []string{
+			"GET",
+			"POST",
+			"PUT",
+			"DELETE",
+			"HEAD",
+			"PATCH",
+			"OPTIONS",
+		},
+		AllowHeaders: []string{
+			"Origin",
+			"Content-Length",
+			"Content-Type",
+		},
+		AllowCredentials: false,
+		MaxAge:           12 * time.Hour,
+	}
+}
+
+// func Default() gin.HandlerFunc {
+// 	config := DefaultConfig()
+// 	config.AllowAllOrigins = true
+// 	return New(config)
+// }
+
+// func New(config Config) gin.HandlerFunc {
+// 	cors := newCors(config)
+// 	return func(c *gin.Context) {
+// 		cors.applyCors(c)
+// 	}
+// }
