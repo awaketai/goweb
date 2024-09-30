@@ -1,0 +1,15 @@
+2024-09-30 14:44:00 [INFO] this is debug log
+2024-09-30 14:44:00 [INFO] this is info log
+2024-09-30 14:44:00 [WARNING] this is warn log
+2024-09-30 14:44:00 [ERROR] this is error log
+2024-09-30 14:44:00 [INFO] {test 1}
+2024-09-30 14:44:00 [FATAL] this is fatal log
+2024-09-30 | 2024-09-30 15:36:56 | 741864 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:149 | log.go:149 | INFO | this is debug log
+2024-09-30 | 2024-09-30 15:36:56 | 742206 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:153 | log.go:153 | INFO | this is info log
+2024-09-30 | 2024-09-30 15:36:56 | 742232 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:157 | log.go:157 | INFO | this is warn log2024-09-30 | 2024-09-30 15:36:56 | 742246 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:161 | log.go:161 | INFO | this is error log2024-09-30 | 2024-09-30 15:36:56 | 742258 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:149 | log.go:149 | INFO | {test 1}2024-09-30 | 2024-09-30 15:36:56 | 742289 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:165 | log.go:165 | INFO | this is fatal log
+2024-09-30 | 2024-09-30 15:40:46 | 371964 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:149 | log.go:149 | INFO | this is debug log
+2024-09-30 | 2024-09-30 15:40:46 | 372048 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:153 | log.go:153 | INFO | this is info log
+2024-09-30 | 2024-09-30 15:40:46 | 372066 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:157 | log.go:157 | INFO | this is warn log
+2024-09-30 | 2024-09-30 15:40:46 | 372079 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:161 | log.go:161 | INFO | this is error log
+2024-09-30 | 2024-09-30 15:40:46 | 372092 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:149 | log.go:149 | INFO | {test 1}
+2024-09-30 | 2024-09-30 15:40:46 | 372120 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:165 | log.go:165 | INFO | this is fatal log
