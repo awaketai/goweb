@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// core code reference from beego config package
 type Configer interface {
 	Set(key, val string) error
 	String(key string) (string, error)
@@ -28,21 +29,21 @@ type BaseConfiger struct {
 	reader func(ctx context.Context, key string) (string, error)
 }
 
-func NewBaseConfiger(reader func(ctx context.Context, key string) (string, error)) *BaseConfiger {
-	return &BaseConfiger{
+func NewBaseConfiger(reader func(ctx context.Context, key string) (string, error)) BaseConfiger {
+	return BaseConfiger{
 		reader: reader,
 	}
 }
 
-func (b BaseConfiger) Set(key, val string) error {
+func (b *BaseConfiger) Set(key, val string) error {
 	return nil
 }
 
-func (b BaseConfiger) String(key string) (string, error) {
+func (b *BaseConfiger) String(key string) (string, error) {
 	return b.reader(context.TODO(), key)
 }
 
-func (b BaseConfiger) Strings(key string) ([]string, error) {
+func (b *BaseConfiger) Strings(key string) ([]string, error) {
 	res, err := b.String(key)
 	if err != nil || len(res) == 0 {
 		return nil, err
@@ -51,7 +52,7 @@ func (b BaseConfiger) Strings(key string) ([]string, error) {
 	return strings.Split(res, ";"), nil
 }
 
-func (b BaseConfiger) Int(key string) (int, error) {
+func (b *BaseConfiger) Int(key string) (int, error) {
 	res, err := b.reader(context.TODO(), key)
 	if err != nil {
 		return 0, err
@@ -60,7 +61,7 @@ func (b BaseConfiger) Int(key string) (int, error) {
 	return strconv.Atoi(res)
 }
 
-func (b BaseConfiger) Int64(key string) (int64, error) {
+func (b *BaseConfiger) Int64(key string) (int64, error) {
 	res, err := b.reader(context.TODO(), key)
 	if err != nil {
 		return 0, err
@@ -69,7 +70,7 @@ func (b BaseConfiger) Int64(key string) (int64, error) {
 	return strconv.ParseInt(res, 10, 64)
 }
 
-func (b BaseConfiger) Bool(key string) (bool, error) {
+func (b *BaseConfiger) Bool(key string) (bool, error) {
 	res, err := b.reader(context.TODO(), key)
 	if err != nil {
 		return false, err
@@ -78,7 +79,7 @@ func (b BaseConfiger) Bool(key string) (bool, error) {
 	return ParseBool(res)
 }
 
-func (b BaseConfiger) Float(key string) (float64, error) {
+func (b *BaseConfiger) Float(key string) (float64, error) {
 	res, err := b.reader(context.TODO(), key)
 	if err != nil {
 		return 0, err
@@ -87,7 +88,7 @@ func (b BaseConfiger) Float(key string) (float64, error) {
 	return strconv.ParseFloat(res, 64)
 }
 
-func (b BaseConfiger) DefaultString(key string, defaultVal string) string {
+func (b *BaseConfiger) DefaultString(key string, defaultVal string) string {
 	if res, err := b.String(key); res != "" && err == nil {
 		return res
 	}
@@ -95,7 +96,7 @@ func (b BaseConfiger) DefaultString(key string, defaultVal string) string {
 	return defaultVal
 }
 
-func (b BaseConfiger) DefaultStrings(key string, defaultVal []string) []string {
+func (b *BaseConfiger) DefaultStrings(key string, defaultVal []string) []string {
 	if res, err := b.Strings(key); len(res) > 0 && err == nil {
 		return res
 	}
@@ -103,7 +104,7 @@ func (b BaseConfiger) DefaultStrings(key string, defaultVal []string) []string {
 	return defaultVal
 }
 
-func (b BaseConfiger) DefaultInt(key string, defaultVal int) int {
+func (b *BaseConfiger) DefaultInt(key string, defaultVal int) int {
 	if res, err := b.Int(key); err == nil {
 		return res
 	}
@@ -111,7 +112,7 @@ func (b BaseConfiger) DefaultInt(key string, defaultVal int) int {
 	return defaultVal
 }
 
-func (b BaseConfiger) DefaultInt64(key string, defaultVal int64) int64 {
+func (b *BaseConfiger) DefaultInt64(key string, defaultVal int64) int64 {
 	if res, err := b.Int64(key); err == nil {
 		return res
 	}
@@ -119,7 +120,7 @@ func (b BaseConfiger) DefaultInt64(key string, defaultVal int64) int64 {
 	return defaultVal
 }
 
-func (b BaseConfiger) DefaultBool(key string, defaultVal bool) bool {
+func (b *BaseConfiger) DefaultBool(key string, defaultVal bool) bool {
 	if res, err := b.Bool(key); err == nil {
 		return res
 	}
@@ -127,7 +128,7 @@ func (b BaseConfiger) DefaultBool(key string, defaultVal bool) bool {
 	return defaultVal
 }
 
-func (b BaseConfiger) DefaultFloat(key string, defaultVal float64) float64 {
+func (b *BaseConfiger) DefaultFloat(key string, defaultVal float64) float64 {
 	if re, err := b.Float(key); err == nil {
 		return re
 	}
