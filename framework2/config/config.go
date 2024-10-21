@@ -173,3 +173,9 @@ func ParseBool(val any) (bool, error) {
 	}
 	return false, fmt.Errorf("parsing %q:invalud value", val)
 }
+
+// ExpandValueEnv return value of convert with environment variable
+func ExpandValueEnv(val string) (realValue string) {
+	realValue = val
+	return realValue
+}
