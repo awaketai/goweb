@@ -28,6 +28,45 @@ func Get(key string, defaultValue string) string {
 	return defaultValue
 }
 
+func MustGet(key string) (string, error) {
+	if val, ok := env.Load(key); ok {
+		return val.(string), nil
+	}
+
+	return "", fmt.Errorf("key not found:%v", key)
+}
+
+func Set(key string, value string) {
+	env.Store(key, value)
+}
+
+func MustSet(key string, value string) error {
+	err := os.Setenv(key, value)
+	if err != nil {
+		return err
+	}
+	env.Store(key, value)
+
+	return nil
+}
+
+func GetAll() map[string]string {
+	envs := make(map[string]string, 32)
+	env.Range(func(key, value any) bool {
+		switch key := key.(type) {
+		case string:
+			switch val := value.(type) {
+			case string:
+				envs[key] = val
+
+			}
+		}
+		return true
+	})
+
+	return envs
+}
+
 func envFile() (string, error) {
 	if file := os.Getenv("GOENV"); file != "" {
 		if file == "off" {
