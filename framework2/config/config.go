@@ -1,8 +1,10 @@
 package config
 
+// from beego config
 import (
 	"context"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -175,7 +177,60 @@ func ParseBool(val any) (bool, error) {
 }
 
 // ExpandValueEnv return value of convert with environment variable
-func ExpandValueEnv(val string) (realValue string) {
-	realValue = val
-	return realValue
+func ExpandValueEnv(value string) (realValue string) {
+	realValue = value
+	vLen := len(value)
+	// 3 = ${}
+	if vLen < 3 {
+		return
+	}
+	// Need start with "${" and end with "}", then return.
+	if value[0] != '$' || value[1] != '{' || value[vLen-1] != '}' {
+		return
+	}
+
+	key := ""
+	defaultV := ""
+	// value start with "${"
+	for i := 2; i < vLen; i++ {
+		if value[i] == '|' && (i+1 < vLen && value[i+1] == '|') {
+			key = value[2:i]
+			defaultV = value[i+2 : vLen-1] // other string is default value.
+			break
+		} else if value[i] == '}' {
+			key = value[2:i]
+			break
+		}
+	}
+
+	realValue = os.Getenv(key)
+	if realValue == "" {
+		realValue = defaultV
+	}
+
+	return
+}
+
+// ExpandValueEnvForMap convert all string value with environment variable.
+func ExpandValueEnvForMap(m map[string]interface{}) map[string]interface{} {
+	for k, v := range m {
+		switch value := v.(type) {
+		case string:
+			m[k] = ExpandValueEnv(value)
+		case map[string]interface{}:
+			m[k] = ExpandValueEnvForMap(value)
+		case map[string]string:
+			for k2, v2 := range value {
+				value[k2] = ExpandValueEnv(v2)
+			}
+			m[k] = value
+		case map[interface{}]interface{}:
+			tmp := make(map[string]interface{}, len(value))
+			for k2, v2 := range value {
+				tmp[k2.(string)] = v2
+			}
+			m[k] = ExpandValueEnvForMap(tmp)
+		}
+	}
+	return m
 }

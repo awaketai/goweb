@@ -1,5 +1,6 @@
 package config
 
+// from beego config
 import (
 	"bufio"
 	"bytes"
@@ -12,7 +13,6 @@ import (
 	"sync"
 )
 
-// core code from beego
 var (
 	defaultSection = "default"
 	bNumComment    = []byte{'#'}

@@ -1,5 +1,7 @@
 package env
 
+// from beego config
+
 import (
 	"fmt"
 	"go/build"
