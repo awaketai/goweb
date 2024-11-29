@@ -37,6 +37,18 @@ func NewBaseConfiger(reader func(ctx context.Context, key string) (string, error
 	}
 }
 
+var adapters = make(map[string]Config)
+
+func Register(name string, adapter Config) {
+	if adapter == nil {
+		panic("config:Register adapter is nil")
+	}
+	if _, ok := adapters[strings.ToLower(name)]; ok {
+		panic("config:Register adapter already registered " + name)
+	}
+	adapters[strings.ToLower(name)] = adapter
+}
+
 func (b *BaseConfiger) Set(key, val string) error {
 	return nil
 }
@@ -234,3 +246,6 @@ func ExpandValueEnvForMap(m map[string]interface{}) map[string]interface{} {
 	}
 	return m
 }
+
+type DecodeOption func(options decodeOptions)
+type decodeOptions struct{}
