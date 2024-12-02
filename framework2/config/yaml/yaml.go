@@ -84,58 +84,107 @@ func (c *ConfigContainer) String(key string) (string, error) {
 }
 
 func (c *ConfigContainer) Strings(key string) ([]string, error) {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.String(key)
+	if v == "" || err != nil {
+		return nil, err
+	}
+	return strings.Split(v, ";"), nil
 }
 
 func (c *ConfigContainer) Int(key string) (int, error) {
-	//TODO implement me
-	panic("implement me")
+	if v, err := c.getData(key); err == nil {
+		return 0, err
+	} else if vv, ok := v.(int); ok {
+		return vv, nil
+	} else if vv, ok := v.(int64); ok {
+		return int(vv), nil
+	}
+
+	return 0, errors.New("not int value")
 }
 
 func (c *ConfigContainer) Int64(key string) (int64, error) {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.getData(key)
+	if err != nil {
+		return 0, err
+	}
+	switch val := v.(type) {
+	case int:
+		return int64(val), nil
+	case int64:
+		return val, nil
+	default:
+		return 0, errors.New("not int or int64 value")
+	}
 }
 
 func (c *ConfigContainer) Bool(key string) (bool, error) {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.getData(key)
+	if err != nil {
+		return false, err
+	}
+	return config.ParseBool(v)
 }
 
 func (c *ConfigContainer) Float(key string) (float64, error) {
-	//TODO implement me
-	panic("implement me")
+	if v, err := c.getData(key); err != nil {
+		return 0.0, err
+	} else if vv, ok := v.(float64); ok {
+		return vv, nil
+	} else if vv, ok := v.(int); ok {
+		return float64(vv), nil
+	} else if vv, ok := v.(int64); ok {
+		return float64(vv), nil
+	}
+	return 0.0, errors.New("not float64 value")
 }
 
 func (c *ConfigContainer) DefaultString(key string, defaultVal string) string {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.String(key)
+	if v == "" || err != nil {
+		return defaultVal
+	}
+	return v
 }
 
 func (c *ConfigContainer) DefaultStrings(key string, defaultVal []string) []string {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.Strings(key)
+	if v == nil || err != nil {
+		return defaultVal
+	}
+	return v
 }
 
 func (c *ConfigContainer) DefaultInt(key string, defaultVal int) int {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.Int(key)
+	if err != nil {
+		return defaultVal
+	}
+	return v
 }
 
 func (c *ConfigContainer) DefaultInt64(key string, defaultVal int64) int64 {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.Int64(key)
+	if err != nil {
+		return defaultVal
+	}
+	return v
 }
 
 func (c *ConfigContainer) DefaultBool(key string, defaultVal bool) bool {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.Bool(key)
+	if err != nil {
+		return defaultVal
+	}
+	return v
 }
 
 func (c *ConfigContainer) DefaultFloat(key string, defaultVal float64) float64 {
-	//TODO implement me
-	panic("implement me")
+	v, err := c.Float(key)
+	if err != nil {
+		return defaultVal
+	}
+	return v
 }
 
 func (c *ConfigContainer) Unmarshaler(prefix string, obj any, _ ...config.DecodeOption) error {
@@ -149,6 +198,17 @@ func (c *ConfigContainer) Unmarshaler(prefix string, obj any, _ ...config.Decode
 	}
 
 	return yaml.Unmarshal(bytes, obj)
+}
+
+func (c *ConfigContainer) Sub(key string) (config.Configer, error) {
+	sub, err := c.subMap(key)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ConfigContainer{
+		data: sub,
+	}, nil
 }
 
 func (c *ConfigContainer) subMap(key string) (map[string]any, error) {
@@ -170,6 +230,47 @@ func (c *ConfigContainer) subMap(key string) (map[string]any, error) {
 	}
 
 	return tmpData, nil
+}
+
+func (c *ConfigContainer) OnChange(_ string, _ func(value string)) {
+	// do nothing
+}
+
+func (c *ConfigContainer) GetSection(section string) (map[string]string, error) {
+	if v, ok := c.data[section]; ok {
+		switch val := v.(type) {
+		case map[string]any:
+			res := make(map[string]string, len(val))
+			for k2, v2 := range val {
+				res[k2] = fmt.Sprintf("%v", v2)
+			}
+			return res, nil
+		case map[string]string:
+			return val, nil
+		default:
+			return nil, fmt.Errorf("the section is invalid:%s", section)
+		}
+	}
+
+	return nil, errors.New("section not found")
+}
+
+func (c *ConfigContainer) SaveConfigFile(filename string) error {
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	buf, err := yaml.Marshal(c.data)
+	if err != nil {
+		return err
+	}
+	_, err = f.Write(buf)
+	return err
+}
+
+func (c *ConfigContainer) DIY(key string) (any, error) {
+	return c.getData(key)
 }
 
 func (c *ConfigContainer) getData(key string) (interface{}, error) {
