@@ -2,10 +2,13 @@ package json
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/awaketai/goweb/framework2/config"
 	"io"
 	"os"
+	"strconv"
+	"strings"
 	"sync"
 )
 
@@ -23,10 +26,8 @@ func (j *JSONConfig) Parse(filename string) (config.Configer, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(content))
 
-	//return j.ParseData(content), nil
-	return nil, nil
+	return j.ParseData(content)
 }
 
 func (j *JSONConfig) ParseData(data []byte) (config.Configer, error) {
@@ -67,70 +68,153 @@ func (jc *JSONConfigContainer) sub(key string) (map[string]any, error) {
 	return res, nil
 }
 
+func (jc *JSONConfigContainer) getData(key string) any {
+	if key == "" {
+		return nil
+	}
+	jc.RLock()
+	defer jc.RUnlock()
+	sectionKeys := strings.Split(key, "::")
+	if len(sectionKeys) >= 2 {
+		curVal, ok := jc.data[sectionKeys[0]]
+		if !ok {
+			return nil
+		}
+		for _, secKey := range sectionKeys[1:] {
+			if vo, ok := curVal.(map[string]any); ok {
+				if curVal, ok = vo[secKey]; !ok {
+					return nil
+				}
+			}
+		}
+
+		return curVal
+	}
+	if v, ok := jc.data[key]; ok {
+		return v
+	}
+
+	return nil
+}
+
 func (jc *JSONConfigContainer) Set(key, val string) error {
-	//TODO implement me
-	//panic("implement me")
+	jc.Lock()
+	defer jc.Unlock()
+	jc.data[key] = val
 	return nil
 }
 
 func (jc *JSONConfigContainer) String(key string) (string, error) {
-	//TODO implement me
-	panic("implement me")
+	val := jc.getData(key)
+	if val != nil {
+		if v, ok := val.(string); ok {
+			return v, nil
+		}
+	}
+
+	return "", nil
 }
 
 func (jc *JSONConfigContainer) Strings(key string) ([]string, error) {
-	//TODO implement me
-	panic("implement me")
+	stringVal, err := jc.String(key)
+	if err != nil || stringVal == "" {
+		return nil, err
+	}
+
+	return strings.Split(stringVal, ";"), nil
 }
 
 func (jc *JSONConfigContainer) Int(key string) (int, error) {
-	//TODO implement me
-	panic("implement me")
+	val := jc.getData(key)
+	if val != nil {
+		if v, ok := val.(float64); ok {
+			return int(v), nil
+		} else if v, ok := val.(string); ok {
+			return strconv.Atoi(v)
+		}
+
+		return 0, errors.New("not valid value")
+	}
+
+	return 0, errors.New("not valid value")
 }
 
 func (jc *JSONConfigContainer) Int64(key string) (int64, error) {
-	//TODO implement me
-	panic("implement me")
+	val := jc.getData(key)
+	if val != nil {
+		if v, ok := val.(float64); ok {
+			return int64(v), nil
+		}
+		return 0, errors.New("not int64 value")
+	}
+	return 0, errors.New("not exist key:" + key)
 }
 
 func (jc *JSONConfigContainer) Bool(key string) (bool, error) {
-	//TODO implement me
-	panic("implement me")
+	val := jc.getData(key)
+	if val != nil {
+		return config.ParseBool(val)
+	}
+	return false, fmt.Errorf("not exist key: %q", key)
 }
 
 func (jc *JSONConfigContainer) Float(key string) (float64, error) {
-	//TODO implement me
-	panic("implement me")
+	val := jc.getData(key)
+	if val != nil {
+		if v, ok := val.(float64); ok {
+			return v, nil
+		}
+		return 0.0, errors.New("not float64 value")
+	}
+	return 0.0, errors.New("not exist key:" + key)
 }
 
 func (jc *JSONConfigContainer) DefaultString(key string, defaultVal string) string {
-	//TODO implement me
-	panic("implement me")
+	if v, err := jc.String(key); v != "" && err == nil {
+		return v
+	}
+
+	return defaultVal
 }
 
 func (jc *JSONConfigContainer) DefaultStrings(key string, defaultVal []string) []string {
-	//TODO implement me
-	panic("implement me")
+	if v, err := jc.Strings(key); v != nil && err == nil {
+		return v
+	}
+
+	return defaultVal
 }
 
 func (jc *JSONConfigContainer) DefaultInt(key string, defaultVal int) int {
-	//TODO implement me
-	panic("implement me")
+	if v, err := jc.Int(key); err == nil {
+		return v
+	}
+
+	return defaultVal
 }
 
 func (jc *JSONConfigContainer) DefaultInt64(key string, defaultVal int64) int64 {
-	//TODO implement me
-	panic("implement me")
+	if v, err := jc.Int64(key); err == nil {
+		return v
+	}
+
+	return defaultVal
 }
 
 func (jc *JSONConfigContainer) DefaultBool(key string, defaultVal bool) bool {
-	//TODO implement me
-	panic("implement me")
+	if v, err := jc.Bool(key); err == nil {
+		return v
+	}
+
+	return defaultVal
 }
 
 func (jc *JSONConfigContainer) DefaultFloat(key string, defaultVal float64) float64 {
-	//TODO implement me
-	panic("implement me")
+	if v, err := jc.Float(key); err == nil {
+		return v
+	}
+
+	return defaultVal
 }
 
 func (jc *JSONConfigContainer) name() {
