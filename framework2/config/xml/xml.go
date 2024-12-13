@@ -2,10 +2,14 @@ package xml
 
 import (
 	"errors"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+	"sync"
+
 	"github.com/awaketai/goweb/framework2/config"
 	"github.com/beego/x2j"
-	"os"
-	"sync"
 )
 
 type Config struct {
@@ -46,67 +50,133 @@ type ConfigContainer struct {
 	sync.Mutex
 }
 
-func (c ConfigContainer) Set(key, val string) error {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) Unmarshaler(prefix string,obj any,opt ...config.DecodeOption) error{
+	return nil
 }
 
-func (c ConfigContainer) String(key string) (string, error) {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) Sub(key string)(config.Configer,error){
+	sub,err := c.sub(key)
+	if err != nil { 
+		return nil,err
+	}
+
+	return &ConfigContainer{
+		data: sub,
+	},nil
+
 }
 
-func (c ConfigContainer) Strings(key string) ([]string, error) {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) sub(key string)(map[string]any,error){
+	if key == "" {
+		return c.data,nil
+	}
+	value,ok := c.data[key]
+	if !ok {
+		return nil,fmt.Errorf("the key is not found:%s",key)
+	}
+	res,ok := value.(map[string]any)
+	if !ok {
+		return nil,fmt.Errorf("the value of this key is not a structure:%s",key)
+	}
+
+	return res,nil
 }
 
-func (c ConfigContainer) Int(key string) (int, error) {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) Set(key, val string) error {
+	c.Lock()
+	defer c.Unlock()
+	c.data[key] = val
+
+	return nil
 }
 
-func (c ConfigContainer) Int64(key string) (int64, error) {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) String(key string) (string, error) {
+	if v,ok := c.data[key].(string);ok {
+		return v,nil
+	}
+
+	return "",nil
 }
 
-func (c ConfigContainer) Bool(key string) (bool, error) {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) Strings(key string) ([]string, error) {
+	v,err := c.String(key)
+	if err != nil || v == "" {
+		return nil,err
+	}
+
+	return strings.Split(v,";"),nil
 }
 
-func (c ConfigContainer) Float(key string) (float64, error) {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) Int(key string) (int, error) {
+	return strconv.Atoi(c.data[key].(string))
 }
 
-func (c ConfigContainer) DefaultString(key string, defaultVal string) string {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) Int64(key string) (int64, error) {
+	return strconv.ParseInt(c.data[key].(string),10,64)
 }
 
-func (c ConfigContainer) DefaultStrings(key string, defaultVal []string) []string {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) Bool(key string) (bool, error) {
+	if v := c.data[key];v != nil {
+		return config.ParseBool(v)
+	}
+
+	return false,fmt.Errorf("not exist key:%q",key)
 }
 
-func (c ConfigContainer) DefaultInt(key string, defaultVal int) int {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) Float(key string) (float64, error) {
+	return strconv.ParseFloat(c.data[key].(string),64)
 }
 
-func (c ConfigContainer) DefaultInt64(key string, defaultVal int64) int64 {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) DefaultString(key string, defaultVal string) string {
+	v,err := c.String(key)
+	if err != nil || v == "" {
+		return defaultVal
+	}
+
+	return v
 }
 
-func (c ConfigContainer) DefaultBool(key string, defaultVal bool) bool {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) DefaultStrings(key string, defaultVal []string) []string {
+	v,err := c.Strings(key)
+	if err != nil || v == nil {
+		return defaultVal
+	}
+
+	return v
 }
 
-func (c ConfigContainer) DefaultFloat(key string, defaultVal float64) float64 {
-	//TODO implement me
-	panic("implement me")
+func (c *ConfigContainer) DefaultInt(key string, defaultVal int) int {
+	v,err := c.Int(key)
+	if err != nil {
+		return defaultVal
+	}
+
+	return v
+}
+
+func (c *ConfigContainer) DefaultInt64(key string, defaultVal int64) int64 {
+	v,err := c.Int64(key)
+	if err != nil {
+		return defaultVal
+		}
+
+		return v
+}
+
+func (c *ConfigContainer) DefaultBool(key string, defaultVal bool) bool {
+	v,err := c.Bool(key)
+	if err != nil { 
+		return defaultVal
+	}
+
+	return v
+}
+
+func (c *ConfigContainer) DefaultFloat(key string, defaultVal float64) float64 {
+	v,err := c.Float(key )
+	if err != nil { 
+		return defaultVal
+	}
+
+	return v
 }
