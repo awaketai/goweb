@@ -19,7 +19,7 @@ func init() {
 		env.Store(splits[0], os.Getenv(splits[1]))
 	}
 	env.Store("GOBIN", GetGOBIN())
-	env.Store("GOPATH", GetGOPATH)
+	env.Store("GOPATH", GetGOPATH())
 }
 
 func Get(key string, defaultValue string) string {
