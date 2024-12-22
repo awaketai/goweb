@@ -24,6 +24,16 @@ type Configer interface {
 	DefaultInt64(key string, defaultVal int64) int64
 	DefaultBool(key string, defaultVal bool) bool
 	DefaultFloat(key string, defaultVal float64) float64
+
+	// DIY return the original value
+	DIY(key string) (interface{}, error)
+
+	GetSection(section string) (map[string]string, error)
+
+	Unmarshaler(prefix string, obj interface{}, opt ...DecodeOption) error
+	Sub(key string) (Configer, error)
+	OnChange(key string, fn func(value string))
+	SaveConfigFile(filename string) error
 }
 
 type BaseConfiger struct {
@@ -163,10 +173,11 @@ func ParseBool(val any) (bool, error) {
 	case bool:
 		return v, nil
 	case string:
+		v = strings.ToLower(v)
 		switch v {
-		case "1", "t", "T", "true", "TRUE", "True", "YES", "yes", "Yes", "Y", "y", "ON", "on", "On":
+		case "1", "t", "true", "yes", "y", "on":
 			return true, nil
-		case "0", "f", "F", "false", "FALSE", "False", "NO", "no", "No", "N", "n", "OFF", "off", "Off":
+		case "0", "f", "false", "no", "n", "off":
 			return false, nil
 		}
 	case int8, int32, int64:
@@ -245,6 +256,24 @@ func ExpandValueEnvForMap(m map[string]interface{}) map[string]interface{} {
 		}
 	}
 	return m
+}
+
+func NewConfig(adapterName, filename string) (Configer, error) {
+	adapter, ok := adapters[adapterName]
+	if !ok {
+		return nil, fmt.Errorf("unknown adapter %q", adapter)
+	}
+
+	return adapter.Parse(filename)
+}
+
+func NewConfigData(adapterName string, data []byte) (Configer, error) {
+	adapter, ok := adapters[adapterName]
+	if !ok {
+		return nil, fmt.Errorf("unknown adapter %q", adapter)
+	}
+
+	return adapter.ParseData(data)
 }
 
 type DecodeOption func(options decodeOptions)
