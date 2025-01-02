@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// from beego
 func init() {
 	config.Register("toml", &Config{})
 }
@@ -23,7 +24,7 @@ func (c *Config) Parse(filename string) (config.Configer, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return c.ParseData(ctx)
 }
 
