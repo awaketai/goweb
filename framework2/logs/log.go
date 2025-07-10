@@ -9,16 +9,6 @@ import (
 	"time"
 )
 
-type Level int8
-
-const (
-	LevelDebug Level = iota
-	LevelInfo
-	LevelWarn
-	LevelError
-	LevelFatal
-)
-
 // log flags
 const (
 	Ldate = 1 << iota // date
