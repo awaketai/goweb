@@ -20,7 +20,7 @@ func TestFileLogWriter(t *testing.T) {
 	}
 
 	defer fileWriter.Close()
-	logger := NewLogger(LevelInfo, Ldate|Ltime|Lmicrosecond|Llongfile, fileWriter)
+	logger := NewLog(LevelInfo, Ldate|Ltime|Lmicrosecond|Llongfile, fileWriter)
 	logger.Debug("this is debug log")
 	logger.Info("this is info log")
 	logger.Warn("this is warn log")
@@ -39,7 +39,7 @@ func TestFileLogWriter(t *testing.T) {
 
 func TestConsoleLogWriter(t *testing.T) {
 	consoleWriter := NewConsoleWriter()
-	logger := NewLogger(LevelInfo, Ldate|Ltime|Lmicrosecond, consoleWriter)
+	logger := NewLog(LevelInfo, Ldate|Ltime|Lmicrosecond, consoleWriter)
 	logger.Debug("this is console debug log")
 	logger.Info("this is console  info log")
 	logger.Warn("this is console  warn log")

@@ -53,7 +53,7 @@ type DefaultLogger struct {
 	flags   int
 }
 
-func NewLogger(level Level, flags int, writers ...LogWriter) *DefaultLogger {
+func NewLog(level Level, flags int, writers ...LogWriter) *DefaultLogger {
 	if len(writers) == 0 {
 		writers = append(writers, &ConsoleWriter{})
 	}

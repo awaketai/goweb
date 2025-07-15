@@ -28,6 +28,14 @@ func NewEntry (logger *logger)*Entry {
 	}
 }
 
+func entry(logger *logger) *Entry {
+	return &Entry{
+		logger: logger,
+		Buffer: &bytes.Buffer{},
+		Map: map[string]any{},
+	}	
+}
+
 func (e *Entry) write(level Level,format string,args ...any) {
 	if e.logger.opt.level > level {
 		return 
@@ -49,7 +57,7 @@ func (e *Entry) write(level Level,format string,args ...any) {
 	}
 	e.format()
 	e.writer()
-	e.releas()
+	e.release()
 }
 
 func (e *Entry) format() {
@@ -62,7 +70,7 @@ func (e *Entry) writer() {
 	e.logger.mu.Unlock()
 }
 
-func (e *Entry) releas() {
+func (e *Entry) release() {
 	e.Args = nil
 	e.Line = 0
 	e.Func = ""
