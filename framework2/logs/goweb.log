@@ -13,3 +13,9 @@
 2024-09-30 | 2024-09-30 15:40:46 | 372079 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:161 | log.go:161 | INFO | this is error log
 2024-09-30 | 2024-09-30 15:40:46 | 372092 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:149 | log.go:149 | INFO | {test 1}
 2024-09-30 | 2024-09-30 15:40:46 | 372120 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:165 | log.go:165 | INFO | this is fatal log
+2025-07-21 | 2025-07-21 20:01:35 | 426103 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:139 | log.go:139 | INFO | this is debug log
+2025-07-21 | 2025-07-21 20:01:35 | 426489 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:143 | log.go:143 | INFO | this is info log
+2025-07-21 | 2025-07-21 20:01:35 | 426522 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:147 | log.go:147 | WARNING | this is warn log
+2025-07-21 | 2025-07-21 20:01:35 | 426540 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:151 | log.go:151 | ERROR | this is error log
+2025-07-21 | 2025-07-21 20:01:35 | 426555 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:139 | log.go:139 | INFO | {test 1}
+2025-07-21 | 2025-07-21 20:01:35 | 426595 | /Users/ashertai/wwwroot/goweb/framework2/logs/log.go:155 | log.go:155 | FATAL | this is fatal log

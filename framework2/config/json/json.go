@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/awaketai/goweb/framework2/config"
 	"io"
 	"os"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/awaketai/goweb/framework2/config"
+	"github.com/mitchellh/mapstructure"
 )
 
 // from beego
@@ -217,6 +219,44 @@ func (jc *JSONConfigContainer) DefaultFloat(key string, defaultVal float64) floa
 	return defaultVal
 }
 
-func (jc *JSONConfigContainer) name() {
+func (jc *JSONConfigContainer) DIY(key string) (any, error) {
+	if v, ok := jc.data[key]; ok {
+		return v, nil
+	}
 
+	return nil, fmt.Errorf("not exist key:%q", key)
+}
+
+func (jc *JSONConfigContainer) GetSection(section string) (map[string]string, error) {
+	if v, ok := jc.data[section]; ok {
+		return v.(map[string]string), nil
+	}
+	return nil, errors.New("nonexist section " + section)
+}
+
+func (jc *JSONConfigContainer) OnChange(key string, fn func(value string)) {
+
+}
+
+func (jc *JSONConfigContainer) SaveConfigFile(filename string) error {
+	return nil
+}
+
+func (jc *JSONConfigContainer) Sub(key string) (config.Configer, error) {
+	sub, err := jc.sub(key)
+	if err != nil {
+		return nil, err
+	}
+
+	return &JSONConfigContainer{
+		data: sub,
+	}, nil
+}
+
+func (jc *JSONConfigContainer) Unmarshaler(prefix string, obj any, opt ...config.DecodeOption) error {
+	sub, err := jc.sub(prefix)
+	if err != nil {
+		return err
+	}
+	return mapstructure.Decode(sub, obj)
 }

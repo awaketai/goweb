@@ -28,11 +28,11 @@ type Configer interface {
 	DefaultFloat(key string, defaultVal float64) float64
 
 	// DIY return the original value
-	DIY(key string) (interface{}, error)
+	DIY(key string) (any, error)
 
 	GetSection(section string) (map[string]string, error)
 
-	Unmarshaler(prefix string, obj interface{}, opt ...DecodeOption) error
+	Unmarshaler(prefix string, obj any, opt ...DecodeOption) error
 	Sub(key string) (Configer, error)
 	OnChange(key string, fn func(value string))
 	SaveConfigFile(filename string) error
@@ -237,20 +237,20 @@ func ExpandValueEnv(value string) (realValue string) {
 }
 
 // ExpandValueEnvForMap convert all string value with environment variable.
-func ExpandValueEnvForMap(m map[string]interface{}) map[string]interface{} {
+func ExpandValueEnvForMap(m map[string]any) map[string]any {
 	for k, v := range m {
 		switch value := v.(type) {
 		case string:
 			m[k] = ExpandValueEnv(value)
-		case map[string]interface{}:
+		case map[string]any:
 			m[k] = ExpandValueEnvForMap(value)
 		case map[string]string:
 			for k2, v2 := range value {
 				value[k2] = ExpandValueEnv(v2)
 			}
 			m[k] = value
-		case map[interface{}]interface{}:
-			tmp := make(map[string]interface{}, len(value))
+		case map[any]any:
+		tmp := make(map[string]any, len(value))
 			for k2, v2 := range value {
 				tmp[k2.(string)] = v2
 			}
@@ -279,7 +279,7 @@ func NewConfigData(adapterName string, data []byte) (Configer, error) {
 }
 
 // ToString converts values of any type to string.
-func ToString(x interface{}) string {
+func ToString(x any) string {
 	switch y := x.(type) {
 
 	// Handle dates with special logic
